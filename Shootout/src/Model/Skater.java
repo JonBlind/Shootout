@@ -18,10 +18,11 @@ package Model;
 public abstract class Skater {
   protected String name;
   protected TEAM_COLOR color;
-  protected double speed;
   protected double rotationDegree;
   protected double xCoord;
   protected double yCoord;
+  protected double xVelo;
+  protected double yVelo;
   protected boolean hasPuck;
   protected boolean pokeCheck;
 
@@ -42,10 +43,11 @@ public abstract class Skater {
                 double xCoord, double yCoord) {
     this.name = name;
     this.color = color;
-    this.speed = 0.0;
     this.rotationDegree = rotationDegree;
     this.xCoord = xCoord;
     this.yCoord = yCoord;
+    this.xVelo = 0;
+    this.yVelo = 0;
     this.hasPuck = false;
     this.pokeCheck = false;
   }
