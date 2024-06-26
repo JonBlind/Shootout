@@ -11,6 +11,7 @@ package Model;
  *   <li>A RotationalDegree showing their direction</li>
  *   <li>Xcoord of their position</li>
  *   <li>ycoord of their position</li>
+ *   <li>State of their movement</li>
  *   <li>Do they control the puck?</li>
  *   <li>Are they poke checking?</li>
  * </ul>
@@ -21,8 +22,7 @@ public abstract class Skater {
   protected double rotationDegree;
   protected double xCoord;
   protected double yCoord;
-  protected double xVelo;
-  protected double yVelo;
+  protected MovementManager movementManager;
   protected boolean hasPuck;
   protected boolean pokeCheck;
 
@@ -46,10 +46,13 @@ public abstract class Skater {
     this.rotationDegree = rotationDegree;
     this.xCoord = xCoord;
     this.yCoord = yCoord;
-    this.xVelo = 0;
-    this.yVelo = 0;
+    this.movementManager = new MovementManager();
     this.hasPuck = false;
     this.pokeCheck = false;
+  }
+
+  public String getName() {
+    return name;
   }
 
 
