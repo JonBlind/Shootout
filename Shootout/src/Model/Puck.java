@@ -1,10 +1,20 @@
 package Model;
 
-//Maybe consider putting coordinates and movement tracking into their own class.
-//Physics in general might be its own class to be honest. Plan it out.
+/**
+ * This class represents the mechanics behind the puck, the item the game revolves all around.
+ */
 public class Puck {
-  protected double speed;
-  protected double angle;
-  protected double xCoord;
-  protected double yCoord;
+  private double speed;
+  private double angle;
+  private double xCoord;
+  private double yCoord;
+  private boolean possessed;
+
+  public Puck(double xCoord, double yCoord) {
+    this.xCoord = xCoord;
+    this.yCoord = yCoord;
+    this.speed = 0.0;
+    this.angle = 0.0;
+    this.possessed = false;
+  }
 }
