@@ -66,8 +66,8 @@ public class MovementManager {
   }
 
   private void updatePosition(double deltaTime) {
-    double newX = player.getXCoord() + xVelocity * deltaTime;
-    double newY = player.getYCoord() + yVelocity * deltaTime;
+    double newX = player.getPosition().getXCoord() + xVelocity * deltaTime;
+    double newY = player.getPosition().getYCoord() + yVelocity * deltaTime;
     player.setPosition(newX, newY);
   }
 

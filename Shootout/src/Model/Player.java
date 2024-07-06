@@ -20,8 +20,7 @@ public abstract class Player {
   private String name;
   private TEAM_COLOR color;
   private double rotationDegree;
-  private double xCoord;
-  private double yCoord;
+  private Position position;
   private MovementManager movementManager;
   private boolean hasPuck;
   private boolean pokeCheck;
@@ -44,8 +43,7 @@ public abstract class Player {
     this.name = name;
     this.color = color;
     this.rotationDegree = rotationDegree;
-    this.xCoord = xCoord;
-    this.yCoord = yCoord;
+    this.position = new Position(500,500);
     this.movementManager = new MovementManager(this);
     this.hasPuck = false;
     this.pokeCheck = false;
@@ -59,17 +57,13 @@ public abstract class Player {
     this.name = name;
   }
 
-  public double getXCoord() {
-    return xCoord;
-  }
-
-  public double getYCoord() {
-    return yCoord;
-  }
-
   public void setPosition(double x, double y) {
-    this.xCoord = x;
-    this.yCoord = y;
+    position.setXCoord(x);
+    position.setYCoord(y);
+  }
+
+  public Position getPosition() {
+    return position;
   }
 
   public void updatePlayer(double deltaTime) {
