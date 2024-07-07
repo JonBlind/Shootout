@@ -19,6 +19,7 @@ package Model;
 public abstract class Player {
   private String name;
   private TEAM_COLOR color;
+  private int radius;
   private double rotationDegree;
   private Position position;
   private MovementManager movementManager;
@@ -34,14 +35,13 @@ public abstract class Player {
    * Constructor of a basic player.
    * @param name Name of the player.
    * @param color Team the player is part of.
+   * @param radius Size of the player
    * @param rotationDegree Degree representing direction.
-   * @param xCoord x-coordinate of player on the ice.
-   * @param yCoord y-coordinate of player on the ice.
    */
-  public Player(String name, TEAM_COLOR color, double rotationDegree,
-                double xCoord, double yCoord) {
+  public Player(String name, TEAM_COLOR color, int radius, double rotationDegree) {
     this.name = name;
     this.color = color;
+    this.radius = radius;
     this.rotationDegree = rotationDegree;
     this.position = new Position(500,500);
     this.movementManager = new MovementManager(this);
