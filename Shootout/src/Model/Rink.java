@@ -21,17 +21,67 @@ import java.util.List;
  * </ul>
  * The very end zones will resemble rectangles, but will have their corners removed depending on
  * the radius/length of the back zone.
- *
  */
 public class Rink {
-  private List<Zone> zones;
+  private Zone[] zones;
   private double length;
   private double height;
 
-  public Rink(List<Zone> zones, double length, double height) {
-    this.zones = new ArrayList<>();
+  /**
+   * Constructor for testing purposes likely. Requires all fields to be included.
+   *
+   * @param zones  Array of zones representing the rink when combined.
+   * @param length Horizontal size of the rink.
+   * @param height Vertical size of the rink.
+   */
+  public Rink(Zone[] zones, double length, double height) {
     this.length = length;
     this.height = height;
+    this.zones = zones;
   }
 
+  /**
+   * Constructor based on just the dimensions of the rink.
+   *
+   * @param length Horizontal size of the rink.
+   * @param height Vertical size of the rink.
+   */
+  public Rink(double length, double height) {
+    this.length = length;
+    this.height = height;
+    this.zones = initializeZones();
+  }
+
+  /**
+   * Method initalizes the zones of the rink utilizing its dimensions.
+   *
+   * @return Array of Zones.
+   * @throws IllegalStateException if the zones for some reason to not
+   *                               cover the entire rink length.
+   */
+  private Zone[] initializeZones() throws IllegalStateException {
+    double startOfZone1 = 0;
+    double endOfZone1 = (0.055 * length);
+    double startOfZone2 = endOfZone1;
+    double endOfZone2 = startOfZone2 + (0.375 * length);
+    double startOfZone3 = endOfZone2;
+    double endOfZone3 = startOfZone3 + (0.25 * length);
+    double startOfZone4 = endOfZone3;
+    double endOfZone4 = startOfZone4 + (0.375 * length);
+    double startOfZone5 = endOfZone4;
+    double endOfZone5 = startOfZone5 + (0.055 * length);
+
+    Zone[] zones =
+            {new Zone(Zone.ZoneType.LEFT_BEHIND_NET, startOfZone1, endOfZone1, 0, height),
+                    new Zone(Zone.ZoneType.LEFT_ZONE, startOfZone2, endOfZone2, 0, height),
+                    new Zone(Zone.ZoneType.NEUTRAL_ZONE, startOfZone3, endOfZone3, 0, height),
+                    new Zone(Zone.ZoneType.RIGHT_ZONE, startOfZone4, endOfZone4, 0, height),
+                    new Zone(Zone.ZoneType.RIGHT_BEHIND_NET, startOfZone5, endOfZone5, 0, height)};
+
+    if ((endOfZone5 - startOfZone1) != this.length) {
+      throw new IllegalStateException("Combined Zone lengths do not match Rink length");
+    }
+
+    return zones;
+  }
 }

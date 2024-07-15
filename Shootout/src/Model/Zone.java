@@ -29,11 +29,11 @@ public class Zone {
    *
    * @param zoneType ZoneType that represents what this zone is.
    * @param startX   The left-most x-coordinate of the zone.
-   * @param startY   The top-most y-coordinate of the zone.
    * @param endX     The right-most x-coordinate of the zone.
+   * @param startY   The top-most y-coordinate of the zone.
    * @param endY     The bottom-most y-coordinate of the zone.
    */
-  public Zone(ZoneType zoneType, double startX, double startY, double endX, double endY) {
+  public Zone(ZoneType zoneType, double startX, double endX, double startY, double endY) {
     this.zoneType = zoneType;
     this.startX = startX;
     this.startY = startY;
