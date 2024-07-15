@@ -53,7 +53,7 @@ public class Rink {
   }
 
   /**
-   * Method initalizes the zones of the rink utilizing its dimensions.
+   * Method initializes the zones of the rink utilizing its dimensions.
    *
    * @return Array of Zones.
    * @throws IllegalStateException if the zones for some reason to not

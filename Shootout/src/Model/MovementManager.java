@@ -5,8 +5,8 @@ package Model;
  * or the shooter.
  */
 public class MovementManager {
-  private double xVelocity;
-  private double yVelocity;
+  double xVelocity;
+  double yVelocity;
   private boolean upPressed;
   private boolean downPressed;
   private boolean leftPressed;
@@ -26,6 +26,14 @@ public class MovementManager {
     this.leftPressed = false;
     this.rightPressed = false;
     this.player = player;
+  }
+
+  /**
+   * Constructor for subclasses. Essentially just translate the velocity fields.
+   */
+  public MovementManager(double xVelocity, double yVelocity) {
+    this.xVelocity = xVelocity;
+    this.yVelocity = yVelocity;
   }
 
   /**

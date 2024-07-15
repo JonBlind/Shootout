@@ -9,6 +9,7 @@ public class Puck {
   private double angle;
   private Position position;
   private boolean possessed;
+  private Player possessor;
 
   /**
    * Basic constructor for a puck using only coordinates.
@@ -20,6 +21,7 @@ public class Puck {
     this.speed = 0.0;
     this.angle = 0.0;
     this.possessed = false;
+    this.possessor = null;
   }
 
   /**
