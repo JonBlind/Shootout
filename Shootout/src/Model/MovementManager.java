@@ -11,7 +11,7 @@ public class MovementManager {
   private boolean downPressed;
   private boolean leftPressed;
   private boolean rightPressed;
-  private Player player;
+  private MobileObject player;
 
   /**
    * Base constructor for a MovementManager which requires a player to start tracking and updating
@@ -29,7 +29,7 @@ public class MovementManager {
   }
 
   /**
-   * Constructor for subclasses. Essentially just translate the velocity fields.
+   * Constructor for puck subclasses. Essentially just translate the velocity fields.
    */
   public MovementManager(double xVelocity, double yVelocity) {
     this.xVelocity = xVelocity;

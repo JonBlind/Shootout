@@ -1,10 +1,9 @@
 package Model;
 
 public class MovementManagerPuck extends MovementManager {
-  double angle;
+  private double angle;
 
-  //TODO: CHANGE PLAYER IN MOVEMENT MANAGER TO CALL FOR A MOBILE OBJECT!
-  public MovementManagerPuck()
-
+  //TODO: Will Have to make MovementManager Abstract, and make a specific version for each
+  //  type of class that needs one.
+  public MovementManagerPuck(Puck puck) {
   }
-}

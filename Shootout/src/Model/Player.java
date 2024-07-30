@@ -16,7 +16,7 @@ package Model;
  *   <li>Are they poke checking?</li>
  * </ul>
  */
-public abstract class Player {
+public abstract class Player implements MobileObject {
   private String name;
   private TEAM_COLOR color;
   private int radius;
@@ -57,17 +57,24 @@ public abstract class Player {
     this.name = name;
   }
 
+  @Override
   public void setPosition(double x, double y) {
     position.setXCoord(x);
     position.setYCoord(y);
   }
 
+  @Override
   public Position getPosition() {
     return position;
   }
 
-  public void updatePlayer(double deltaTime) {
+  @Override
+  public void update(double deltaTime) {
     movementManager.updateMovement(deltaTime);
+  }
+
+  private MovementManager getMovementManager() {
+    return movementManager;
   }
 
 
