@@ -1,4 +1,7 @@
-package Model;
+package Model.MovementManagers;
+
+import Model.MovementManager;
+import Model.Puck;
 
 public class MovementManagerPuck extends MovementManager {
   private double angle;
