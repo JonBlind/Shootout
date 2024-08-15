@@ -6,7 +6,7 @@ import Model.Puck;
 public class MovementManagerPuck extends MovementManager {
   private double angle;
 
-  //TODO: Will Have to make MovementManager Abstract, and make a specific version for each
-  //  type of class that needs one.
-  public MovementManagerPuck(Puck puck) {
-  }
+  //TODO: Abstracted movement managers. Time to actually detail the subclasses.
+  // I pray that this project ends up being worth doing because I'm doubting how
+  // anyone will look at this favorably.
+

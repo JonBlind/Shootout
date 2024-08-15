@@ -4,7 +4,7 @@ package Model;
  * Interface that represents any object located in the game. Any object should have a position
  * on the screen.
  */
-public interface GameObject {
+public interface IGameObject {
 
   /**
    * Sets the objects position.

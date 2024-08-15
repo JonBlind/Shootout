@@ -5,7 +5,7 @@ package Model;
  * tracking (given by the GameObject interface), collision based-physics incorporated
  * into their design, and movement capabilities.
  */
-public interface MobileObject extends GameObject {
+public interface IMobileObject extends IGameObject {
 
   /**
    * Obtains the Position coordinates that the object has in its direct fields.

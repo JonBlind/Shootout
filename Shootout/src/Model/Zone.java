@@ -80,7 +80,7 @@ public class Zone {
    * @param position position of the player or game object.
    * @return is this position within any zone?
    */
-  public boolean contains(Position position) {
+  public boolean isInsideRink(Position position) {
     double currentX = position.getXCoord();
     double currentY = position.getYCoord();
 

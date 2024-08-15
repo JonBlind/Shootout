@@ -16,7 +16,7 @@ package Model;
  *   <li>Are they poke checking?</li>
  * </ul>
  */
-public abstract class Player implements MobileObject {
+public abstract class Player implements IMobileObject {
   private String name;
   private TEAM_COLOR color;
   private int radius;

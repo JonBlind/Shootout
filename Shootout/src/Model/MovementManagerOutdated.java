@@ -11,7 +11,7 @@ public class MovementManager {
   private boolean downPressed;
   private boolean leftPressed;
   private boolean rightPressed;
-  private MobileObject player;
+  private IMobileObject player;
 
   /**
    * Base constructor for a MovementManager which requires a player to start tracking and updating
