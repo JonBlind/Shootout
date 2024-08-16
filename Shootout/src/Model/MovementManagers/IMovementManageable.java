@@ -4,7 +4,7 @@ package Model.MovementManagers;
  * Interface representing the set of classes responsible for managing the movement of Mobile
  * Objects. Any class implementing this is a variation of a MovementManager.
  */
-interface IMovementManageable {
+public interface IMovementManageable {
 
   /**
    * Main movement update cycle. Alters the state of the player's movement depending on the current state of the

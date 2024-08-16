@@ -1,6 +1,8 @@
 package Model;
 
 
+import Model.MovementManagers.*;
+
 /**
  * Player is the abstract class representing any possible unit that could be controlled in the
  * game, so only the goalie and shooter.
@@ -22,7 +24,7 @@ public abstract class Player implements IMobileObject {
   private int radius;
   private double rotationDegree;
   private Position position;
-  private MovementManager movementManager;
+  private IMovementManageable movementManager;
   private boolean hasPuck;
   private boolean pokeCheck;
 
@@ -44,7 +46,7 @@ public abstract class Player implements IMobileObject {
     this.radius = radius;
     this.rotationDegree = rotationDegree;
     this.position = new Position(500,500);
-    this.movementManager = new MovementManager(this);
+    this.movementManager = new MovementManagerPlayer(this);
     this.hasPuck = false;
     this.pokeCheck = false;
   }
@@ -73,7 +75,7 @@ public abstract class Player implements IMobileObject {
     movementManager.updateMovement(deltaTime);
   }
 
-  private MovementManager getMovementManager() {
+  private IMovementManageable getMovementManager() {
     return movementManager;
   }
 

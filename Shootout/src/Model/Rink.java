@@ -24,20 +24,24 @@ import java.util.List;
  */
 public class Rink {
   private Zone[] zones;
+  private Net[] nets;
   private double length;
   private double height;
 
   /**
    * Constructor for testing purposes likely. Requires all fields to be included.
    *
-   * @param zones  Array of zones representing the rink when combined.
+   * @param zones  Array of zones representing the rink when combined in order.
+   * @param nets   Array of nets representing the hockey nets. Array of two,
+   *               indices 0 is the left, and 1 is the right net.
    * @param length Horizontal size of the rink.
    * @param height Vertical size of the rink.
    */
-  public Rink(Zone[] zones, double length, double height) {
+  public Rink(Zone[] zones, Net[] nets, double length, double height) {
     this.length = length;
     this.height = height;
     this.zones = zones;
+    this.nets = nets;
   }
 
   /**
@@ -50,6 +54,7 @@ public class Rink {
     this.length = length;
     this.height = height;
     this.zones = initializeZones();
+    this.nets = initializeNets(length, height);
   }
 
   /**
@@ -83,5 +88,27 @@ public class Rink {
     }
 
     return zones;
+  }
+
+  //TODO: Create a method to initialize nets depending on rink dimensions
+  private Net[] initializeNets(double length, double height) {
+    return null;
+  }
+
+  /**
+   * Returns boolean indicating if the position argument is present within the boundaries of the
+   * rink. This is done by iterating through each zone and seeing if it returns true for any.
+   * If any zone returns true, the method return true.
+   * If no zone returns true, the method returns false.
+   * @param position X, Y coordinates to observe.
+   * @return boolean identifying if the Position argument is in the rink or not.
+   */
+  public boolean isInsideRink(Position position) {
+    for (Zone zone : zones) {
+      if (zone.isInsideZone(position)) {
+        return true;
+      }
+    }
+    return false;
   }
 }

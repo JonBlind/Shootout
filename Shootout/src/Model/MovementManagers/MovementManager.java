@@ -2,14 +2,17 @@ package Model.MovementManagers;
 
 import Model.IMobileObject;
 import Model.Physics;
+import Model.Rink;
 
 abstract class MovementManager implements IMovementManageable {
   protected double xVelocity;
   protected double yVelocity;
+  protected Rink rink;
   protected IMobileObject mobileObject;
 
-  public MovementManager(IMobileObject mobileObject) {
+  public MovementManager(IMobileObject mobileObject, Rink rink) {
     this.mobileObject = mobileObject;
+    this.rink = rink;
     this.xVelocity = 0;
     this.yVelocity = 0;
   }
