@@ -11,7 +11,8 @@ import java.util.List;
  * <li>85 ft in width</li>
  * <li>Neutral ice is 50 ft long, so 25% of the rinks length</li>
  * <li>Each zone is 64 ft long + 11 ft behind the ice. So 37.5% of the rink total.</li>
- * <li>The zone behind the net is 5.5% of the total rink.
+ * <li>The zone behind the goal line is 5.5% of the total rink (11ft).</li>
+ * <li>
  * </ul>
  * With this information, the rink should represent a rectangle split into 5 zones:
  * <ul>
@@ -27,6 +28,7 @@ public class Rink {
   private Net[] nets;
   private double length;
   private double height;
+  private static Rink instance;
 
   /**
    * Constructor for testing purposes likely. Requires all fields to be included.
@@ -37,7 +39,7 @@ public class Rink {
    * @param length Horizontal size of the rink.
    * @param height Vertical size of the rink.
    */
-  public Rink(Zone[] zones, Net[] nets, double length, double height) {
+  private Rink(Zone[] zones, Net[] nets, double length, double height) {
     this.length = length;
     this.height = height;
     this.zones = zones;
@@ -50,11 +52,19 @@ public class Rink {
    * @param length Horizontal size of the rink.
    * @param height Vertical size of the rink.
    */
-  public Rink(double length, double height) {
+  private Rink(double length, double height) {
     this.length = length;
     this.height = height;
     this.zones = initializeZones();
     this.nets = initializeNets(length, height);
+  }
+
+
+  public static Rink getRinkInstance(double length, double height) {
+    if (instance == null) {
+      instance = new Rink(length, height);
+    }
+    return instance;
   }
 
   /**
@@ -90,9 +100,23 @@ public class Rink {
     return zones;
   }
 
-  //TODO: Create a method to initialize nets depending on rink dimensions
+  /**
+   * Creates appropriate nets depending on the rink dimensions, for now has hard-coded teams,
+   * will need to alter to allow access to future team selection implementation.
+   * @param length length of the rink.
+   * @param height height of the rink.
+   * @return Array of Nets with a length of 2. Index 0 is the left net, Index 1 is the right net.
+   */
   private Net[] initializeNets(double length, double height) {
-    return null;
+    nets[0] = new Net(new Position(GameConfig.LEFT_GOAL_LINE_X,
+            (GameConfig.RINK_HEIGHT / 2) - (GameConfig.NET_LENGTH / 2)),
+            Player.TEAM.BLUE, Net.NetSide.LEFT);
+
+    nets[1] = new Net(new Position(GameConfig.RIGHT_GOAL_LINE_X,
+            (GameConfig.RINK_HEIGHT / 2) - (GameConfig.NET_LENGTH / 2)),
+            Player.TEAM.RED, Net.NetSide.RIGHT);
+
+    return nets;
   }
 
   /**

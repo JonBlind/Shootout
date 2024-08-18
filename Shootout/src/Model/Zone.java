@@ -95,6 +95,12 @@ public class Zone {
     }
   }
 
+  /**
+   * Identifies if the position is at the very left section of the rink. This section is started
+   * by the left wall and extends until the left goal line.
+   * @param position Position to check.
+   * @return boolean. Is this position in the left-most zone?
+   */
   private boolean isInLeftBehindNetZone(Position position) {
     double currentX = position.getXCoord();
     double currentY = position.getYCoord();
@@ -123,7 +129,12 @@ public class Zone {
                     && currentY <= endY);
   }
 
-
+  /**
+   * Identifies if the position is at the very right section of the rink. This section is started
+   * by the right goal line and extends until the end.
+   * @param position Position to check.
+   * @return boolean. Is this position in the right-most zone?
+   */
   private boolean isInRightBehindNetZone(Position position) {
     double currentX = position.getXCoord();
     double currentY = position.getYCoord();

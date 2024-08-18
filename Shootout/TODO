@@ -6,3 +6,8 @@
 2. Finish up MovementManager subclasses
 3. Figure out how to implement the goalie crease (either add it to net or make it another class)
 4. Figure out logic regarding boundaries of goalie crease and the rink.
+
+
+//LAPTOP ABOUT TO DIE.
+Think rink situation is handled, but need to fix managers to properly call for it.
+Need to create a way in the future to select teams and alter the rink accordingly.

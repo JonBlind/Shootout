@@ -1,6 +1,6 @@
 package Model.MovementManagers;
 
-import Model.Physics;
+import Model.GameConfig;
 import Model.Player;
 import Model.Rink;
 
@@ -24,23 +24,23 @@ public class MovementManagerPlayer extends MovementManager {
   public void updateMovement(double deltaTime) {
     updateVelocity(deltaTime);
     applyFriction(deltaTime);
-    clampVelocity(MAX_VELO);
+    clampVelocity(GameConfig.MAX_VELOCITY);
     updatePosition(deltaTime);
   }
 
   @Override
   public void updateVelocity(double deltaTime) {
     if (upPressed) {
-      yVelocity += Physics.ACCELERATION * deltaTime;
+      yVelocity += GameConfig.ACCELERATION * deltaTime;
     }
     if (downPressed) {
-      yVelocity -= Physics.ACCELERATION * deltaTime;
+      yVelocity -= GameConfig.ACCELERATION * deltaTime;
     }
     if (leftPressed) {
-      xVelocity -= Physics.ACCELERATION * deltaTime;
+      xVelocity -= GameConfig.ACCELERATION * deltaTime;
     }
     if (rightPressed) {
-      xVelocity += Physics.ACCELERATION * deltaTime;
+      xVelocity += GameConfig.ACCELERATION * deltaTime;
     }
   }
 
@@ -50,7 +50,7 @@ public class MovementManagerPlayer extends MovementManager {
    * @param direction the direction matching the associated key pressed.
    * @param pressed   boolean, is this key being pressed or no?
    */
-  public void setKeyPressed(Physics.DIRECTION direction, boolean pressed) {
+  public void setKeyPressed(GameConfig.DIRECTION direction, boolean pressed) {
     switch (direction) {
       case UP:
         upPressed = pressed;

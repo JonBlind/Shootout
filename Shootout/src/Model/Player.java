@@ -20,7 +20,7 @@ import Model.MovementManagers.*;
  */
 public abstract class Player implements IMobileObject {
   private String name;
-  private TEAM_COLOR color;
+  private TEAM color;
   private int radius;
   private double rotationDegree;
   private Position position;
@@ -31,7 +31,7 @@ public abstract class Player implements IMobileObject {
   /**
    * Possible color choices for team assignments.
    */
-  public enum TEAM_COLOR { BLUE, RED, YELLOW, GREEN, ORANGE, PURPLE };
+  public enum TEAM { BLUE, RED, YELLOW, GREEN, ORANGE, PURPLE };
 
   /**
    * Constructor of a basic player.
@@ -40,7 +40,7 @@ public abstract class Player implements IMobileObject {
    * @param radius Size of the player
    * @param rotationDegree Degree representing direction.
    */
-  public Player(String name, TEAM_COLOR color, int radius, double rotationDegree) {
+  public Player(String name, TEAM color, int radius, double rotationDegree) {
     this.name = name;
     this.color = color;
     this.radius = radius;

@@ -1,7 +1,7 @@
 package Model.MovementManagers;
 
+import Model.GameConfig;
 import Model.IMobileObject;
-import Model.Physics;
 import Model.Rink;
 
 abstract class MovementManager implements IMovementManageable {
@@ -39,8 +39,8 @@ abstract class MovementManager implements IMovementManageable {
    * @param deltaTime change in time since the last update. Should be time since last frame.
    */
   protected void applyFriction(double deltaTime) {
-    xVelocity *= (1 - Physics.FRICTION * deltaTime);
-    yVelocity *= (1 - Physics.FRICTION * deltaTime);
+    xVelocity *= (1 - GameConfig.FRICTION * deltaTime);
+    yVelocity *= (1 - GameConfig.FRICTION * deltaTime);
   }
 
   /**
