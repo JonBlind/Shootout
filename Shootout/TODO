@@ -1,13 +1,11 @@
-1. Figure out how to centralize Rink.
-   THis is a huge problem that needs to be solved. Nearly every class requires a Rink to be passed
-   into it for some reason. This is getting tedious, complicates the program, and just makes
-   stuff clutter.
 
-2. Finish up MovementManager subclasses
-3. Figure out how to implement the goalie crease (either add it to net or make it another class)
-4. Figure out logic regarding boundaries of goalie crease and the rink.
+1. Finish up MovementManager subclasses
+2. Figure out how to implement the goalie crease (either add it to net or make it another class)
+3. Figure out logic regarding boundaries of goalie crease and the rink.
+4. Need to create a way in the future to select teams and alter the rink accordingly.
 
 
-//LAPTOP ABOUT TO DIE.
-Think rink situation is handled, but need to fix managers to properly call for it.
-Need to create a way in the future to select teams and alter the rink accordingly.
+Immediately: Start working on finishing the goalie and skater logic before starting the puck,
+             due to how reliant puck movement is on players.
+             Create the stick class
+             Decouple movement managers from object classes

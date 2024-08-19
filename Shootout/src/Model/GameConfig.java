@@ -27,4 +27,6 @@ public class GameConfig {
   public static final double ACCELERATION = 2.0;
   public static final double FRICTION = 0.5;
 
+  //Puck Size
+  public static final double PUCK_RADIUS =  4;
 }

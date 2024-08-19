@@ -28,7 +28,7 @@ public class GoalieCrease {
 
   /**
    * Method to identify if a given position is within the boundaries of this GoalieCrease.
-   * @param position position to evaluate if its inside the goalie crease.
+   * @param position position to evaluate if it's inside the goalie crease.
    * @return boolean, is this position inside the goalie crease?
    */
   public boolean isInsideCrease(Position position) {

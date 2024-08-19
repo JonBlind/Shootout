@@ -2,9 +2,6 @@ package Model.MovementManagers;
 
 import Model.GameConfig;
 import Model.Player;
-import Model.Rink;
-
-import static Model.Physics.MAX_VELO;
 
 public class MovementManagerPlayer extends MovementManager {
   private boolean upPressed;
@@ -12,8 +9,8 @@ public class MovementManagerPlayer extends MovementManager {
   private boolean leftPressed;
   private boolean rightPressed;
 
-  public MovementManagerPlayer(Player player, Rink rink) {
-    super(player, rink);
+  public MovementManagerPlayer(Player player) {
+    super(player);
     upPressed = false;
     downPressed = false;
     leftPressed = false;

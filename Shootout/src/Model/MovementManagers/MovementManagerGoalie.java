@@ -4,7 +4,7 @@ import Model.Player;
 import Model.Rink;
 
 public class MovementManagerGoalie extends MovementManager {
-  public MovementManagerGoalie(Player player, Rink rink) {
-    super(player, rink);
+  public MovementManagerGoalie(Player player) {
+    super(player);
   }
 }

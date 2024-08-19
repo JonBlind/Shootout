@@ -10,9 +10,9 @@ abstract class MovementManager implements IMovementManageable {
   protected Rink rink;
   protected IMobileObject mobileObject;
 
-  public MovementManager(IMobileObject mobileObject, Rink rink) {
+  public MovementManager(IMobileObject mobileObject) {
     this.mobileObject = mobileObject;
-    this.rink = rink;
+    this.rink = Rink.getRinkInstance(GameConfig.RINK_LENGTH, GameConfig.RINK_HEIGHT);
     this.xVelocity = 0;
     this.yVelocity = 0;
   }
