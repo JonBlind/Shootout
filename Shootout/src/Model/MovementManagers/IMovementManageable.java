@@ -1,5 +1,7 @@
 package Model.MovementManagers;
 
+import Model.Position;
+
 /**
  * Interface representing the set of classes responsible for managing the movement of Mobile
  * Objects. Any class implementing this is a variation of a MovementManager.
@@ -7,11 +9,13 @@ package Model.MovementManagers;
 public interface IMovementManageable {
 
   /**
-   * Main movement update cycle. Alters the state of the player's movement depending on the current state of the
-   * player's velocity and user key-presses.
+   * Method to return the location of a MobileObject given a Position and using the current state
+   * of the Movement Manager's Velocity fields.
+   * THIS IS THE LAST STEP OF THE CYCLE
+   *
    * @param deltaTime change in time since the last update. Should be time since last frame.
    */
-  void updateMovement(double deltaTime);
+  Position calculateNewPosition(Position currentPosition, double deltaTime);
 
 
   /**

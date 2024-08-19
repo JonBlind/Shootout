@@ -26,6 +26,10 @@ public class GameConfig {
   public static final double MAX_VELOCITY = 50.0;
   public static final double ACCELERATION = 2.0;
   public static final double FRICTION = 0.5;
+  public static final double SKATER_MAX_VELOCITY = 50.0;
+  public static final double GOALIE_MAX_VELOCITY = 25.0;
+  public static final double SKATER_ACCELERATION = 6.0;
+  public static final double GOALIE_ACCELERATION = 5.0;
 
   //Puck Size
   public static final double PUCK_RADIUS =  4;

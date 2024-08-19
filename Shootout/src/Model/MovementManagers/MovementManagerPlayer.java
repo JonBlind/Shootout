@@ -2,43 +2,20 @@ package Model.MovementManagers;
 
 import Model.GameConfig;
 import Model.Player;
+import Model.Position;
 
-public class MovementManagerPlayer extends MovementManager {
-  private boolean upPressed;
-  private boolean downPressed;
-  private boolean leftPressed;
-  private boolean rightPressed;
+public abstract class MovementManagerPlayer extends MovementManager {
+  protected boolean upPressed;
+  protected boolean downPressed;
+  protected boolean leftPressed;
+  protected boolean rightPressed;
 
-  public MovementManagerPlayer(Player player) {
-    super(player);
+  public MovementManagerPlayer(double initialXVelocity, double initialYVelocity) {
+    super(initialXVelocity, initialYVelocity);
     upPressed = false;
     downPressed = false;
     leftPressed = false;
     rightPressed = false;
-  }
-
-  @Override
-  public void updateMovement(double deltaTime) {
-    updateVelocity(deltaTime);
-    applyFriction(deltaTime);
-    clampVelocity(GameConfig.MAX_VELOCITY);
-    updatePosition(deltaTime);
-  }
-
-  @Override
-  public void updateVelocity(double deltaTime) {
-    if (upPressed) {
-      yVelocity += GameConfig.ACCELERATION * deltaTime;
-    }
-    if (downPressed) {
-      yVelocity -= GameConfig.ACCELERATION * deltaTime;
-    }
-    if (leftPressed) {
-      xVelocity -= GameConfig.ACCELERATION * deltaTime;
-    }
-    if (rightPressed) {
-      xVelocity += GameConfig.ACCELERATION * deltaTime;
-    }
   }
 
   /**

@@ -135,4 +135,44 @@ public class Rink {
     }
     return false;
   }
+
+  /**
+   * Method to return the X-Value of the left end of the rink
+   * This method is being made just in case I need to extract this value and change it in the
+   * future once we actually place this on a visual.
+   * @return X-Value of the left end of the rink.
+   */
+  public double getLeftX() {
+    return 0;
+  }
+
+  /**
+   * Method to return the X-Value of the right end of the rink
+   * This method is being made just in case I need to extract this value and change it in the
+   * future once we actually place this on a visual.
+   * @return X-Value of the right end of the rink.
+   */
+  public double getRightX() {
+    return getLeftX() + length;
+  }
+
+  /**
+   * Method to return the Y-Value of the Bottom end of the rink
+   * This method is being made just in case I need to extract this value and change it in the
+   * future once we actually place this on a visual.
+   * @return Y-Value of the Bottom end of the rink.
+   */
+  public double getBottomY() {
+    return 0;
+  }
+
+  /**
+   * Method to return the Y-Value of the Top end of the rink
+   * This method is being made just in case I need to extract this value and change it in the
+   * future once we actually place this on a visual.
+   * @return Y-Value of the Top end of the rink.
+   */
+  public double getTopY() {
+    return getBottomY() + height;
+  }
 }

@@ -46,7 +46,6 @@ public abstract class Player implements IMobileObject {
     this.radius = radius;
     this.rotationDegree = rotationDegree;
     this.position = new Position(500,500);
-    this.movementManager = new MovementManagerPlayer(this);
     this.hasPuck = false;
     this.pokeCheck = false;
   }
@@ -72,7 +71,6 @@ public abstract class Player implements IMobileObject {
 
   @Override
   public void update(double deltaTime) {
-    movementManager.updateMovement(deltaTime);
   }
 
   private IMovementManageable getMovementManager() {

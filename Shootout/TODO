@@ -8,4 +8,4 @@
 Immediately: Start working on finishing the goalie and skater logic before starting the puck,
              due to how reliant puck movement is on players.
              Create the stick class
-             Decouple movement managers from object classes
+             Work on collision with rink and maybe net as well logic.
