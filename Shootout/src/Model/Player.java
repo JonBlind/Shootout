@@ -10,7 +10,7 @@ import Model.MovementManagers.*;
  * <ul>
  *   <li>A Name</li>
  *   <li>A color representing their team</li>
- *   <li>A RotationalDegree showing their direction</li>
+ *   <li>A angle showing their direction</li>
  *   <li>X-coordinate of their position</li>
  *   <li>Y-coordinate of their position</li>
  *   <li>State of their movement</li>
@@ -19,14 +19,14 @@ import Model.MovementManagers.*;
  * </ul>
  */
 public abstract class Player implements IMobileObject {
-  private String name;
-  private TEAM color;
-  private int radius;
-  private double rotationDegree;
-  private Position position;
-  private IMovementManageable movementManager;
-  private boolean hasPuck;
-  private boolean pokeCheck;
+  protected String name;
+  protected TEAM team;
+  protected double radius;
+  protected double angle;
+  protected Position position;
+  protected IMovementManageable movementManager;
+  protected boolean hasPuck;
+  protected boolean pokeCheck;
 
   /**
    * Possible color choices for team assignments.
@@ -36,18 +36,18 @@ public abstract class Player implements IMobileObject {
   /**
    * Constructor of a basic player.
    * @param name Name of the player.
-   * @param color Team the player is part of.
+   * @param team Team the player is part of.
    * @param radius Size of the player
-   * @param rotationDegree Degree representing direction.
    */
-  public Player(String name, TEAM color, int radius, double rotationDegree) {
+  public Player(String name, TEAM team, double radius) {
     this.name = name;
-    this.color = color;
+    this.team = team;
     this.radius = radius;
-    this.rotationDegree = rotationDegree;
+    this.angle = 0;
     this.position = new Position(500,500);
     this.hasPuck = false;
     this.pokeCheck = false;
+    this.movementManager = null;
   }
 
   public String getName() {
@@ -73,8 +73,28 @@ public abstract class Player implements IMobileObject {
   public void update(double deltaTime) {
   }
 
+  /**
+   * Obtain the MovementManager for this Player object.
+   * @return this Player's MovementManager.
+   */
   private IMovementManageable getMovementManager() {
     return movementManager;
+  }
+
+  /**
+   * Method to alter the degree which a Player's stick is oriented.
+   * @param degree degree which the player is facing.
+   */
+  public void setAngle(double degree) {
+    this.angle = degree;
+  }
+
+  /**
+   * setter method to alter pokeCheck field.
+   * @param pokeCheck boolean, is this player poke checking?
+   */
+  public void setPokeCheck(boolean pokeCheck) {
+    this.pokeCheck = pokeCheck;
   }
 
 
