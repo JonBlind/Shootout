@@ -289,11 +289,9 @@ public class Net {
     double openingX = position.getXCoord();
     double bottomY = position.getYCoord() + thickness;
     double topY = position.getYCoord() + thickness + length;
-    if (netSide == NetSide.RIGHT) {
 
-      return
-
-    }
+    return netY > bottomY && netY < topY && openingX == netX
+              && computeDistanceToNet(obj) < obj.getRadius();
   }
 
   /**
@@ -315,6 +313,7 @@ public class Net {
    * @return boolean value, is the inputted puck touching the net posts?
    */
   public boolean isPuckTouchingNet(Puck Puck) {
+    
 
   }
 
