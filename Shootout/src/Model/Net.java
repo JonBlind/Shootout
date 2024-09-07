@@ -313,8 +313,7 @@ public class Net {
    * @return boolean value, is the inputted puck touching the net posts?
    */
   public boolean isPuckTouchingNet(Puck Puck) {
-    
-
+    return isNetBeingTouched(Puck) && !isOpeningBeingTouched(Puck);
   }
 
   /**
