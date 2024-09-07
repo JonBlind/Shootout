@@ -8,20 +8,6 @@ package Model;
 public interface IMobileObject extends IGameObject {
 
   /**
-   * Obtains the Position coordinates that the object has in its direct fields.
-   * @return Position. A set of coordinate points representing X and Y placement respectively.
-   */
-  Position getPosition();
-
-  /**
-   * Modify the position field of the mobile object, intakes a Position class to replace the
-   * existing one.
-   * @param x   The x-value to which the object's position should be modified to. Double input.
-   * @param y   The y-value to which the object's position should be modified to. Double input.
-   */
-  void setPosition(double x, double y);
-
-  /**
    * Method that represents the update loop for the mobile object. Essentially at every difference
    * of time between each frame (or whenever the code is run), update the objects properties
    * depending on their prior state or interactions since then.
@@ -30,5 +16,17 @@ public interface IMobileObject extends IGameObject {
    */
   void update(double deltaTime);
 
+  /**
+   * Method to return the radius of a mobileObject (puck and player), as these are circular
+   * objects.
+   * @return the radius of the mobileObject.
+   */
+  double getRadius();
+
+  /**
+   * Method to change the radius of a mobileObject (puck and player), as these are circular
+   * objects.
+   */
+  void setRadius(double radius);
 
 }

@@ -11,5 +11,25 @@ public class Skater extends Player {
     this.position = new Position(500, 500);
     this.hasPuck = false;
     this.pokeCheck = false;
+    this.puck = null;
   }
+
+
+  /**
+   * Method to handle Skater initiating a poke check.
+   */
+  public void pokeCheck() {
+
+  }
+
+  public void shoot() {}
+
+  /**
+   * Method to handle a skater colliding with another skater.
+   * @param skater Other skater that this skater is colliding with.
+   */
+  public void handleSkaterOnSkaterCollision(Skater skater) {
+
+  }
+
 }

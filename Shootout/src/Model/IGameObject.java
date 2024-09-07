@@ -7,10 +7,12 @@ package Model;
 public interface IGameObject {
 
   /**
-   * Sets the objects position.
-   * @param position x and y doubles that represent position on the screen.
+   * Modify the position field of the game object, intakes a Position class to replace the
+   * existing one.
+   * @param x   The x-value to which the object's position should be modified to. Double input.
+   * @param y   The y-value to which the object's position should be modified to. Double input.
    */
-  void setPosition(Position position);
+  void setPosition(double x, double y);
 
   /**
    * Get the x,y coordinates of a GameObject.

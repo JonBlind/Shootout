@@ -2,6 +2,7 @@ package Model.MovementManagers;
 
 import Model.GameConfig;
 import Model.IMobileObject;
+import Model.Net;
 import Model.Position;
 import Model.Rink;
 
@@ -93,6 +94,42 @@ abstract class MovementManager implements IMovementManageable {
     }
 
     return new Position(x, y);
+  }
+
+  /**
+   * Reflect the velocities for an object that collides with the net.
+   * @param position Position at which the object is, if they are past or in contact with the side,
+   *                 back, or post of the net, they reflect.
+   * @return New position that the mobile object is after reflecting, will likely be the location
+   * of contact.
+   */
+  protected Position reflectOffNet(Position position) {
+    Net[] nets = rink.getNets();
+  }
+
+  protected boolean collidesWithNet(Position position, Net net) {
+    double posX = position.getXCoord();
+    double posY = position.getYCoord();
+
+    double netStartX = net.getPosition().getXCoord();
+
+    //If net on the right, then add the side length, else subtract the side length.
+    double netEndX = net.getNetSide() == Net.NetSide.RIGHT ? netStartX + net.getSideLength() :
+            netStartX - net.getSideLength();
+
+    double thickness = net.getThickness();
+
+    double netStartY = net.getPosition().getYCoord();
+    double netEndY = net.getPosition().getYCoord() + net.getLength();
+
+    //Check based on established boundaries
+    if (net.getNetSide() == Net.NetSide.RIGHT) {
+      return posX >
+    }
+
+
+
+
   }
 
   @Override

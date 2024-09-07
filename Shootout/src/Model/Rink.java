@@ -175,4 +175,12 @@ public class Rink {
   public double getTopY() {
     return getBottomY() + height;
   }
+
+  /**
+   * Method to return the array of nets.
+   * @return array of nets that exist in this rink instance.
+   */
+  public Net[] getNets() {
+    return nets;
+  }
 }

@@ -27,6 +27,7 @@ public abstract class Player implements IMobileObject {
   protected IMovementManageable movementManager;
   protected boolean hasPuck;
   protected boolean pokeCheck;
+  protected Puck puck;
 
   /**
    * Possible color choices for team assignments.
@@ -48,6 +49,7 @@ public abstract class Player implements IMobileObject {
     this.hasPuck = false;
     this.pokeCheck = false;
     this.movementManager = null;
+    this.puck = null;
   }
 
   public String getName() {
