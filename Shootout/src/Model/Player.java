@@ -13,6 +13,8 @@ import Model.MovementManagers.*;
  *   <li>A angle showing their direction</li>
  *   <li>X-coordinate of their position</li>
  *   <li>Y-coordinate of their position</li>
+ *   <li>An array of positions marking every 45 degrees of the Player, starting from
+ *   the top and moving clockwise.</li>
  *   <li>State of their movement</li>
  *   <li>Do they control the puck?</li>
  *   <li>Are they poke checking?</li>
@@ -24,6 +26,7 @@ public abstract class Player implements IMobileObject {
   protected double radius;
   protected double angle;
   protected Position position;
+  protected Position[] points;
   protected IMovementManageable movementManager;
   protected boolean hasPuck;
   protected boolean pokeCheck;
@@ -46,10 +49,33 @@ public abstract class Player implements IMobileObject {
     this.radius = radius;
     this.angle = 0;
     this.position = new Position(500,500);
+    this.points = calculatePoints();
     this.hasPuck = false;
     this.pokeCheck = false;
     this.movementManager = null;
     this.puck = null;
+  }
+
+  @Override
+  public Position[] calculatePoints() {
+   double objX = getPosition().getXCoord();
+    double objY = getPosition().getYCoord();
+    Position pointUp = new Position(objX, objY + radius);
+    Position pointUpRight = new Position((radius * Math.cos(Math.PI / 4)) + objX,
+        radius * Math.cos(Math.PI / 4) + objY);
+    Position pointRight = new Position(objX + radius, objY);
+    Position pointDownRight = new Position(objX + (radius * Math.cos(Math.PI / 4)),
+        objY - radius * Math.cos(Math.PI / 4));
+    Position pointDown = new Position(objX, objY - radius);
+    Position pointDownLeft = new Position(objX - (radius * Math.cos(Math.PI / 4)),
+        objY - (radius * Math.cos(Math.PI / 4)));
+    Position pointLeft = new Position(objX - radius, objY);
+    Position pointUpLeft = new Position(objX - (radius * Math.cos(Math.PI / 4)),
+        objY + (radius * Math.cos(Math.PI / 4)));
+
+    return new Position[]
+        {pointUp, pointUpRight, pointRight, pointDownRight, pointDown, pointDownLeft, pointLeft,
+        pointUpLeft};
   }
 
   public String getName() {
@@ -97,6 +123,16 @@ public abstract class Player implements IMobileObject {
    */
   public void setPokeCheck(boolean pokeCheck) {
     this.pokeCheck = pokeCheck;
+  }
+
+  @Override
+  public double getRadius() {
+    return radius;
+  }
+
+  @Override
+  public void setRadius(double radius) {
+    this.radius = radius;
   }
 
 

@@ -1,6 +1,7 @@
 package Model.MovementManagers;
 
 import Model.Position;
+import java.util.ArrayList;
 
 /**
  * Interface representing the set of classes responsible for managing the movement of Mobile
@@ -41,4 +42,12 @@ public interface IMovementManageable {
    * @param yVelocity double to change player's y-velocity to.
    */
   void setYVelocity(double yVelocity);
+
+  /**
+   * Given a list of indexes of mobile points that collide with the rink for its argument. It
+   * takes into consideration each colliding points angle and manipulates the velocity accordingly.
+   * @param outputs list of indexes corresponding to the mobile points that the
+   *               Skater object has colliding with the rink.
+   */
+  void handleRinkReflection(ArrayList<Integer> outputs);
 }

@@ -3,6 +3,7 @@ package Model.MovementManagers;
 import Model.GameConfig;
 import Model.Net;
 import Model.Position;
+import java.util.ArrayList;
 
 /**
  * Class that represents and handles the movement of the Puck class.
@@ -25,7 +26,7 @@ public class MovementManagerPuck extends MovementManager {
     applyFriction(deltaTime);
     clampVelocity(GameConfig.PUCK_MAX_VELOCITY);
     Position updatedPos = calculateNewPosition(currentPosition, deltaTime);
-    return reflectOffRink(updatedPos);
+    return null;
   }
 
 
@@ -76,6 +77,11 @@ public class MovementManagerPuck extends MovementManager {
    * of contact.
    */
   protected Position reflectOffNet(Position position) {
+    return null;
+  }
+
+  @Override
+  public void handleRinkReflection(ArrayList<Integer> outputs) {
 
   }
 

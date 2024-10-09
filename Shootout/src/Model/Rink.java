@@ -4,8 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Class representing the hockey rink (play area).
- * A Real Hockey Rink Is:
+ * Class representing the hockey rink (play area). A Real Hockey Rink Is:
  * <ul>
  * <li>200 ft long</li>
  * <li>85 ft in width</li>
@@ -24,6 +23,7 @@ import java.util.List;
  * the radius/length of the back zone.
  */
 public class Rink {
+
   private Zone[] zones;
   private Net[] nets;
   private double length;
@@ -34,8 +34,8 @@ public class Rink {
    * Constructor for testing purposes likely. Requires all fields to be included.
    *
    * @param zones  Array of zones representing the rink when combined in order.
-   * @param nets   Array of nets representing the hockey nets. Array of two,
-   *               indices 0 is the left, and 1 is the right net.
+   * @param nets   Array of nets representing the hockey nets. Array of two, indices 0 is the left,
+   *               and 1 is the right net.
    * @param length Horizontal size of the rink.
    * @param height Vertical size of the rink.
    */
@@ -71,8 +71,8 @@ public class Rink {
    * Method initializes the zones of the rink utilizing its dimensions.
    *
    * @return Array of Zones.
-   * @throws IllegalStateException if the zones for some reason to not
-   *                               cover the entire rink length.
+   * @throws IllegalStateException if the zones for some reason to not cover the entire rink
+   *                               length.
    */
   private Zone[] initializeZones() throws IllegalStateException {
     double startOfZone1 = 0;
@@ -87,11 +87,11 @@ public class Rink {
     double endOfZone5 = startOfZone5 + (0.055 * length);
 
     Zone[] zones =
-            {new Zone(Zone.ZoneType.LEFT_BEHIND_NET, startOfZone1, endOfZone1, 0, height),
-                    new Zone(Zone.ZoneType.LEFT_ZONE, startOfZone2, endOfZone2, 0, height),
-                    new Zone(Zone.ZoneType.NEUTRAL_ZONE, startOfZone3, endOfZone3, 0, height),
-                    new Zone(Zone.ZoneType.RIGHT_ZONE, startOfZone4, endOfZone4, 0, height),
-                    new Zone(Zone.ZoneType.RIGHT_BEHIND_NET, startOfZone5, endOfZone5, 0, height)};
+        {new Zone(Zone.ZoneType.LEFT_BEHIND_NET, startOfZone1, endOfZone1, 0, height),
+            new Zone(Zone.ZoneType.LEFT_ZONE, startOfZone2, endOfZone2, 0, height),
+            new Zone(Zone.ZoneType.NEUTRAL_ZONE, startOfZone3, endOfZone3, 0, height),
+            new Zone(Zone.ZoneType.RIGHT_ZONE, startOfZone4, endOfZone4, 0, height),
+            new Zone(Zone.ZoneType.RIGHT_BEHIND_NET, startOfZone5, endOfZone5, 0, height)};
 
     if ((endOfZone5 - startOfZone1) != this.length) {
       throw new IllegalStateException("Combined Zone lengths do not match Rink length");
@@ -101,29 +101,30 @@ public class Rink {
   }
 
   /**
-   * Creates appropriate nets depending on the rink dimensions, for now has hard-coded teams,
-   * will need to alter to allow access to future team selection implementation.
+   * Creates appropriate nets depending on the rink dimensions, for now has hard-coded teams, will
+   * need to alter to allow access to future team selection implementation.
+   *
    * @param length length of the rink.
    * @param height height of the rink.
    * @return Array of Nets with a length of 2. Index 0 is the left net, Index 1 is the right net.
    */
   private Net[] initializeNets(double length, double height) {
     nets[0] = new Net(new Position(GameConfig.LEFT_GOAL_LINE_X,
-            (GameConfig.RINK_HEIGHT / 2) - (GameConfig.NET_LENGTH / 2)),
-            Player.TEAM.BLUE, Net.NetSide.LEFT);
+        (GameConfig.RINK_HEIGHT / 2) - (GameConfig.NET_LENGTH / 2)),
+        Player.TEAM.BLUE, Net.NetSide.LEFT);
 
     nets[1] = new Net(new Position(GameConfig.RIGHT_GOAL_LINE_X,
-            (GameConfig.RINK_HEIGHT / 2) - (GameConfig.NET_LENGTH / 2)),
-            Player.TEAM.RED, Net.NetSide.RIGHT);
+        (GameConfig.RINK_HEIGHT / 2) - (GameConfig.NET_LENGTH / 2)),
+        Player.TEAM.RED, Net.NetSide.RIGHT);
 
     return nets;
   }
 
   /**
    * Returns boolean indicating if the position argument is present within the boundaries of the
-   * rink. This is done by iterating through each zone and seeing if it returns true for any.
-   * If any zone returns true, the method return true.
-   * If no zone returns true, the method returns false.
+   * rink. This is done by iterating through each zone and seeing if it returns true for any. If any
+   * zone returns true, the method return true. If no zone returns true, the method returns false.
+   *
    * @param position X, Y coordinates to observe.
    * @return boolean identifying if the Position argument is in the rink or not.
    */
@@ -137,9 +138,59 @@ public class Rink {
   }
 
   /**
-   * Method to return the X-Value of the left end of the rink
-   * This method is being made just in case I need to extract this value and change it in the
-   * future once we actually place this on a visual.
+   * Grab the status (boolean flag) representing if each mobile point of the IMobileObject is
+   * inside the rink.
+   * REMINDER: Mobile Points are the 45 degree markers around every mobile object to track position
+   * as every object is a circle.
+   *
+   * @param obj MobileObject to examine if all of its Mobile points are inside the Rink.
+   * @return Boolean array showing the status of every Mobile Point of the inputted mobile object.
+   * Index 0 Should have the top-most point, and each consecutive should be the next 45 degree
+   * point in clockwise rotation.
+   */
+  public Boolean[] locationStatusOfAllMobilePoints(IMobileObject obj) {
+    List<Boolean> boolList = new ArrayList<Boolean>();
+    double objX = obj.getPosition().getXCoord();
+    double objY = obj.getPosition().getYCoord();
+    double radii = obj.getRadius();
+    Position[] points = obj.calculatePoints();
+
+    for (Position point : points) {
+      boolList.add(isInsideRink(point));
+    }
+
+    Boolean[] output = boolList.toArray(new Boolean[0]);
+    return output;
+  }
+
+  /**
+   * Method to identify if the inputted mobile object is completely inside the rink.
+   * Passes object to check status of each mobile point, and iterates through each point's status.
+   * If a single point is not inside the rink, the method returns a true flag, indicating the
+   * object is most likely touching the boards.
+   *
+   * @param obj Mobile object, to check if the object is currently touching the boards or has a
+   *            part located outside the rink.
+   *
+   * @return Boolean value, is this mobile object touching the boards or has a mobile point located
+   * outside the rink?>
+   */
+  public boolean isMobileObjectTouchingBoards(IMobileObject obj) {
+    Boolean[] boolArr = locationStatusOfAllMobilePoints(obj);
+    
+    for (Boolean bool : boolArr) {
+      if (!bool) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /**
+   * Method to return the X-Value of the left end of the rink This method is being made just in case
+   * I need to extract this value and change it in the future once we actually place this on a
+   * visual.
+   *
    * @return X-Value of the left end of the rink.
    */
   public double getLeftX() {
@@ -147,9 +198,10 @@ public class Rink {
   }
 
   /**
-   * Method to return the X-Value of the right end of the rink
-   * This method is being made just in case I need to extract this value and change it in the
-   * future once we actually place this on a visual.
+   * Method to return the X-Value of the right end of the rink This method is being made just in
+   * case I need to extract this value and change it in the future once we actually place this on a
+   * visual.
+   *
    * @return X-Value of the right end of the rink.
    */
   public double getRightX() {
@@ -157,9 +209,10 @@ public class Rink {
   }
 
   /**
-   * Method to return the Y-Value of the Bottom end of the rink
-   * This method is being made just in case I need to extract this value and change it in the
-   * future once we actually place this on a visual.
+   * Method to return the Y-Value of the Bottom end of the rink This method is being made just in
+   * case I need to extract this value and change it in the future once we actually place this on a
+   * visual.
+   *
    * @return Y-Value of the Bottom end of the rink.
    */
   public double getBottomY() {
@@ -167,9 +220,10 @@ public class Rink {
   }
 
   /**
-   * Method to return the Y-Value of the Top end of the rink
-   * This method is being made just in case I need to extract this value and change it in the
-   * future once we actually place this on a visual.
+   * Method to return the Y-Value of the Top end of the rink This method is being made just in case
+   * I need to extract this value and change it in the future once we actually place this on a
+   * visual.
+   *
    * @return Y-Value of the Top end of the rink.
    */
   public double getTopY() {
@@ -178,6 +232,7 @@ public class Rink {
 
   /**
    * Method to return the array of nets.
+   *
    * @return array of nets that exist in this rink instance.
    */
   public Net[] getNets() {

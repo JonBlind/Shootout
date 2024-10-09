@@ -73,27 +73,9 @@ abstract class MovementManager implements IMovementManageable {
 
   /**
    * Reflect the velocities for an object that collides with the rink.
-   * @param position Position at which the object is, if they are past or in contact with the wall,
-   *                 they reflect.
-   * @return New position that the user is after reflecting, will likely be the location
-   * of contact.
    */
-  protected Position reflectOffRink(Position position) {
-    double x = position.getXCoord();
-    double y = position.getYCoord();
+  protected void reflectOffRink(Boolean[] mobilePoints) {
 
-    // Check for boundary interactions and apply the law of reflection
-    if (x < rink.getLeftX() || x > rink.getRightX()) {
-      xVelocity = -xVelocity / 2; // Reflect horizontally and lose half speed
-      x = Math.max(rink.getLeftX(), Math.min(x, rink.getRightX()));
-    }
-
-    if (y < rink.getBottomY() || y > rink.getTopY()) {
-      yVelocity = -yVelocity / 2; // Reflect vertically and lose half speed
-      y = Math.max(rink.getBottomY(), Math.min(y, rink.getTopY()));
-    }
-
-    return new Position(x, y);
   }
 
 
