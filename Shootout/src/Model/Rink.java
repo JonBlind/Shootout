@@ -153,7 +153,7 @@ public class Rink {
     double objX = obj.getPosition().getXCoord();
     double objY = obj.getPosition().getYCoord();
     double radii = obj.getRadius();
-    Position[] points = obj.calculatePoints();
+    Position[] points = obj.initializePoints();
 
     for (Position point : points) {
       boolList.add(isInsideRink(point));

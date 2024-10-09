@@ -15,7 +15,7 @@ public interface IMobileObject extends IGameObject {
    * @return Array of Positions that represent each 45 degree point on the circle representing this
    * MobileObject. Idx 0 is the top, and each point from then on is the clockwise rotation.
    */
-  Position[] calculatePoints();
+  Position[] initializePoints();
 
   /**
    * Method that represents the update loop for the mobile object. Essentially at every difference
@@ -40,5 +40,19 @@ public interface IMobileObject extends IGameObject {
    * objects.
    */
   void setRadius(double radius);
+
+  /**
+   * Method to alter the degree which a Mobile Object is oriented.
+   * For Players, this also correlates to the direction of their stick.
+   * For the Puck, this is simply the last applied direction of force or the same angle as
+   * the player possessing it, if possessed.
+   * @param degree degree which the MobileObject is facing.
+   */
+  public void setAngle(double degree);
+
+  /**
+   * Method to get the current angle that the Mobile Object is oriented.
+   */
+  public double getAngle();
 
 }

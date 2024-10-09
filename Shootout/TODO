@@ -8,6 +8,8 @@
 Immediately: Start working on finishing the goalie and skater logic before starting the puck,
              due to how reliant puck movement is on players.
              Create the stick class
-             Work on collision with rink and maybe net as well logic.
-
-             FIX COLLISION ON RINK. ITS NONSENSICAL AND NEEDS TO CONSIDER RADIUS.
+             Work on collision with player on players.
+                - Current train of thought:
+                Goalie should not have to deal with player collision: skaters don't impact goalie
+                movement because goalie interference would be too goofy in this. However, a goalie
+                has to be able to push the skater away.

@@ -1,15 +1,12 @@
 package Model;
 
 import Model.MovementManagers.MovementManagerPuck;
+import java.util.ArrayList;
 
 /**
  * This class represents the mechanics behind the puck, the item the game revolves all around.
  */
-public class Puck implements IMobileObject {
-  private double radius;
-  private double speed;
-  private double angle;
-  private Position position;
+public class Puck extends MobileObject {
   private boolean possessed;
   private Player possessor;
   private MovementManagerPuck movementManager;
@@ -21,7 +18,7 @@ public class Puck implements IMobileObject {
   public Puck(Position position) {
     this.radius = GameConfig.PUCK_RADIUS;
     this.position = position;
-    this.speed = 0.0;
+    this.points = initializePoints();
     this.angle = 0.0;
     this.possessed = false;
     this.possessor = null;
@@ -63,41 +60,6 @@ public class Puck implements IMobileObject {
     }
     else throw new IllegalArgumentException("Puck's possessor and IsPossessed conflict!");
 
-  }
-
-  /**
-   * Handles the process of a skater shooting the puck. Puck will be un-possessed and the movement
-   * manager updates accordingly.
-   * @param strength Strength of the shot. MUST BE BETWEEN 0.0 and 5.0.
-   */
-  public void handleShot(double strength) throws IllegalArgumentException {
-    if (strength < 0.0 || strength > 5.0) {
-      throw new IllegalArgumentException("Invalid Strength! Must be between 0.0 and 5.0!");
-    }
-    setPossession(null, false);
-    this.movementManager.handleShot(angle, strength);
-
-
-  }
-
-
-  @Override
-  public void setPosition(double x, double y) {
-    position.setXCoord(x);
-    position.setYCoord(y);
-  }
-
-  @Override
-  public Position getPosition() {
-    return this.position;
-  }
-
-  public double getRadius() {
-    return this.radius;
-  }
-
-  public void setRadius(double radius) {
-    this.radius = radius;
   }
 
 }
