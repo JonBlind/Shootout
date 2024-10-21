@@ -7,15 +7,6 @@ package Model;
  */
 public interface IMobileObject extends IGameObject {
 
-  /**
-   * Method that calculates 8 points on the MobileObject. Each point is a 45 degree marker. This
-   * returns an array of Positions. The first position is the top-most, and moves clockwise,
-   * returning every 45 degree point.
-   *
-   * @return Array of Positions that represent each 45 degree point on the circle representing this
-   * MobileObject. Idx 0 is the top, and each point from then on is the clockwise rotation.
-   */
-  Position[] initializePoints();
 
   /**
    * Method that represents the update loop for the mobile object. Essentially at every difference
@@ -26,20 +17,6 @@ public interface IMobileObject extends IGameObject {
    * @param deltaTime Difference in time from the current calculation to the prior.
    */
   void update(double deltaTime);
-
-  /**
-   * Method to return the radius of a mobileObject (puck and player), as these are circular
-   * objects.
-   *
-   * @return the radius of the mobileObject.
-   */
-  double getRadius();
-
-  /**
-   * Method to change the radius of a mobileObject (puck and player), as these are circular
-   * objects.
-   */
-  void setRadius(double radius);
 
   /**
    * Method to alter the degree which a Mobile Object is oriented.
@@ -54,5 +31,21 @@ public interface IMobileObject extends IGameObject {
    * Method to get the current angle that the Mobile Object is oriented.
    */
   public double getAngle();
+
+  /**
+   * Get the radius value being tracked in the object's movement manager.
+   * @return double value representing the radius of this object.
+   */
+  double getRadius();
+
+
+  /**
+   * Return the series of MobilePoints that this Mobile Object's MovementManager has to track.
+   * Represents the points on the perimeter of a mobile object. Every 45-degree angle of a circle,
+   * starting from the top, is a mobile point. Top is index zero and goes clockwise.
+   * @return array of MobilePoints representing the perimeter of a mobile object
+   * respective of the manager's object.
+   */
+  Position[] getPoints();
 
 }

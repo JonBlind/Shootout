@@ -1,5 +1,7 @@
 package Model.MovementManagers;
 
+import static Model.GameConfig.*;
+
 import Model.GameConfig;
 import Model.Player;
 import Model.Position;
@@ -10,8 +12,26 @@ public abstract class MovementManagerPlayer extends MovementManager {
   protected boolean leftPressed;
   protected boolean rightPressed;
 
+  public MovementManagerPlayer(Position position, double initialXVelocity, double initialYVelocity) {
+    super(position, initialXVelocity, initialYVelocity);
+    upPressed = false;
+    downPressed = false;
+    leftPressed = false;
+    rightPressed = false;
+  }
+
   public MovementManagerPlayer(double initialXVelocity, double initialYVelocity) {
     super(initialXVelocity, initialYVelocity);
+    this.position = new Position(500, 500);
+    upPressed = false;
+    downPressed = false;
+    leftPressed = false;
+    rightPressed = false;
+  }
+
+  public MovementManagerPlayer() {
+    this.position = new Position(500, 500);
+    this.radius = SKATER_RADIUS;
     upPressed = false;
     downPressed = false;
     leftPressed = false;
@@ -40,4 +60,10 @@ public abstract class MovementManagerPlayer extends MovementManager {
         break;
     }
   }
+
+  /**
+   * Method to update the velocity as a result of user inputs.
+   * @param deltaTime Change in time since the last update.
+   */
+  abstract protected void updateVelocityFromUserInput(double deltaTime);
 }

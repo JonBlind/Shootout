@@ -1,5 +1,6 @@
 package Model;
 
+import Model.MovementManagers.IMovementManageable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -138,22 +139,22 @@ public class Rink {
   }
 
   /**
-   * Grab the status (boolean flag) representing if each mobile point of the IMobileObject is
-   * inside the rink.
-   * REMINDER: Mobile Points are the 45 degree markers around every mobile object to track position
-   * as every object is a circle.
+   * Grab the status (boolean flag) representing if each mobile point of the IMobileObject is inside
+   * the rink. REMINDER: Mobile Points are the 45 degree markers around every mobile object to track
+   * position as every object is a circle.
    *
-   * @param obj MobileObject to examine if all of its Mobile points are inside the Rink.
+   * @param movementmanager movementmanager to examine if all of its Mobile points are inside the
+   *                        Rink.
    * @return Boolean array showing the status of every Mobile Point of the inputted mobile object.
-   * Index 0 Should have the top-most point, and each consecutive should be the next 45 degree
-   * point in clockwise rotation.
+   * Index 0 Should have the top-most point, and each consecutive should be the next 45 degree point
+   * in clockwise rotation.
    */
-  public Boolean[] locationStatusOfAllMobilePoints(IMobileObject obj) {
+  public Boolean[] locationStatusOfAllMobilePoints(IMovementManageable movementmanager) {
     List<Boolean> boolList = new ArrayList<Boolean>();
-    double objX = obj.getPosition().getXCoord();
-    double objY = obj.getPosition().getYCoord();
-    double radii = obj.getRadius();
-    Position[] points = obj.initializePoints();
+    double objX = movementmanager.getPosition().getXCoord();
+    double objY = movementmanager.getPosition().getYCoord();
+    double radii = movementmanager.getRadius();
+    Position[] points = movementmanager.initializePoints();
 
     for (Position point : points) {
       boolList.add(isInsideRink(point));
@@ -164,20 +165,20 @@ public class Rink {
   }
 
   /**
-   * Method to identify if the inputted mobile object is completely inside the rink.
-   * Passes object to check status of each mobile point, and iterates through each point's status.
-   * If a single point is not inside the rink, the method returns a true flag, indicating the
-   * object is most likely touching the boards.
+   * Method to identify if the inputted mobile object is completely inside the rink. Passes object
+   * to check status of each mobile point, and iterates through each point's status. If a single
+   * point is not inside the rink, the method returns a true flag, indicating the object is most
+   * likely touching the boards.
    *
-   * @param obj Mobile object, to check if the object is currently touching the boards or has a
-   *            part located outside the rink.
-   *
+   * @param movementmanager Movement Manager, to check if the object is currently touching the
+   *                        boards or has a part located outside the rink.
    * @return Boolean value, is this mobile object touching the boards or has a mobile point located
    * outside the rink?>
    */
-  public boolean isMobileObjectTouchingBoards(IMobileObject obj) {
-    Boolean[] boolArr = locationStatusOfAllMobilePoints(obj);
-    
+  public boolean isMobileObjectTouchingBoards(IMovementManageable movementmanager) {
+    movementmanager.getPoints();
+    Boolean[] boolArr = locationStatusOfAllMobilePoints(movementmanager);
+
     for (Boolean bool : boolArr) {
       if (!bool) {
         return true;

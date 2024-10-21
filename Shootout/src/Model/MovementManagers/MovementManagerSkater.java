@@ -1,8 +1,8 @@
 package Model.MovementManagers;
 
 import Model.GameConfig;
-import Model.Position;
-import java.lang.reflect.Array;
+import Model.GameSession;
+import Model.Net;
 import java.util.ArrayList;
 
 public class MovementManagerSkater extends MovementManagerPlayer {
@@ -11,19 +11,40 @@ public class MovementManagerSkater extends MovementManagerPlayer {
     super(initialXVelocity, initialYVelocity);
   }
 
-  @Override
-  public Position updateMovement(Position currentPosition, double deltaTime) {
-    updateVelocity(deltaTime);
-    applyFriction(deltaTime);
-    applyDamping();
-    clampVelocity(GameConfig.SKATER_MAX_VELOCITY);
-
-    Position newPos = calculateNewPosition(currentPosition, deltaTime);
-    return null;
+  public MovementManagerSkater() {
+    super();
   }
 
   @Override
-  public void handleRinkReflection(ArrayList<Integer> outputs) {
+  protected void updateMovement(double deltaTime) {
+    updateVelocityFromUserInput(deltaTime);
+    applyFriction(deltaTime);
+    applyDamping();
+    checkCollisionWithBoards();
+    checkCollisionWithNet();
+    clampVelocity(GameConfig.SKATER_MAX_VELOCITY);
+    calculateNewPosition(deltaTime);
+  }
+
+  private void checkCollisionWithBoards() {
+    if (GameSession.getInstance().getSessionRink().isMobileObjectTouchingBoards(this)) {
+      ArrayList<Integer> impactedPoints = grabBoardCollisionStatusOfMobilePointsInRink();
+      handleRinkAndNetReflection(impactedPoints);
+    }
+  }
+
+  private void checkCollisionWithNet() {
+    Net[] nets = GameSession.getInstance().getSessionNets();
+    for (Net net : nets) {
+      if (net.isTheMobileObjectTouchingNet(this)) {
+        ArrayList<Integer> impactedPoints = grabNetCollisionStatusOfMobilePoints();
+        handleRinkAndNetReflection(impactedPoints);
+      }
+    }
+  }
+
+  @Override
+  public void handleRinkAndNetReflection(ArrayList<Integer> outputs) {
     double xReflectFactor = 0;
     double yReflectFactor = 0;
     for (Integer output : outputs) {
@@ -58,16 +79,18 @@ public class MovementManagerSkater extends MovementManagerPlayer {
       double magnitude =
           Math.sqrt(xReflectFactor * xReflectFactor + yReflectFactor * yReflectFactor);
 
-      xReflectFactor /= magnitude;
-      yReflectFactor /= magnitude;
+      if (magnitude > 0) {
+        xReflectFactor /= magnitude;
+        yReflectFactor /= magnitude;
 
-      xVelocity = xVelocity * xReflectFactor;
-      yVelocity = yVelocity * yReflectFactor;
+        xVelocity = xVelocity * xReflectFactor;
+        yVelocity = yVelocity * yReflectFactor;
+      }
     }
   }
 
   @Override
-  protected void updateVelocity(double deltaTime) {
+  protected void updateVelocityFromUserInput(double deltaTime) {
     if (upPressed) yVelocity += GameConfig.SKATER_ACCELERATION * deltaTime;
     if (downPressed) yVelocity -= GameConfig.SKATER_ACCELERATION * deltaTime;
     if (leftPressed) xVelocity -= GameConfig.SKATER_ACCELERATION * deltaTime;

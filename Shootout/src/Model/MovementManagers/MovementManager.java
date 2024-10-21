@@ -1,32 +1,53 @@
 package Model.MovementManagers;
 
 import Model.GameConfig;
-import Model.IMobileObject;
+import Model.GameSession;
 import Model.Net;
 import Model.Position;
 import Model.Rink;
+import java.util.ArrayList;
 
 abstract class MovementManager implements IMovementManageable {
+  protected Position position;
+  protected double radius;
+  protected Position[] points;
   protected double xVelocity;
   protected double yVelocity;
   protected Rink rink;
 
 
-  public MovementManager(double initialXVelocity, double initialYVelocity) {
+  public MovementManager(Position position, double initialXVelocity, double initialYVelocity) {
+    this.position = new Position(500, 500);
     this.xVelocity = initialXVelocity;
     this.yVelocity = initialYVelocity;
+    this.radius = 5;
     this.rink = Rink.getRinkInstance(GameConfig.RINK_LENGTH, GameConfig.RINK_HEIGHT);
+    this.points = initializePoints();
+  }
+
+  public MovementManager(double initialXVelocity, double initialYVelocity) {
+    this.position = new Position(500, 500);
+    this.xVelocity = initialXVelocity;
+    this.yVelocity = initialYVelocity;
+    this.radius = 5;
+    this.rink = Rink.getRinkInstance(GameConfig.RINK_LENGTH, GameConfig.RINK_HEIGHT);
+    this.points = initializePoints();
   }
 
   /**
-   * This is the main update loop that will be present in every MovementManager.
-   * This will update the velocity of the movement manager normally,
-   * apply friction, apply any other forces, and then clamp if needed.
-   * @param currentPosition Position that is currently being inputted to alter.
-   * @param deltaTime difference in time since the last calculation.
-   * @return Position of the new location the MobileObject will be.
+   * Constructor for the abstract class MovementManager. Should never be used directly outside of
+   * being supered.
    */
-  public abstract Position updateMovement(Position currentPosition, double deltaTime);
+  public MovementManager() {
+    this.position = new Position(500, 500);
+    this.xVelocity = 0;
+    this.yVelocity = 0;
+    this.radius = 5;
+    this.rink = Rink.getRinkInstance(GameConfig.RINK_LENGTH, GameConfig.RINK_HEIGHT);
+    this.points = initializePoints();
+  }
+
+  ;
 
   /**
    * Method to establish a velocity "clamp" Essentially, it ensures that the Mobile Objects
@@ -60,22 +81,165 @@ abstract class MovementManager implements IMovementManageable {
    *
    * @param deltaTime change in time since the last update. Should be time since last frame.
    */
-  protected void updateVelocity(double deltaTime) {
+  protected void updateMovement(double deltaTime) {
   }
 
 
   @Override
-  public Position calculateNewPosition(Position currentPosition, double deltaTime) {
-    double newX = currentPosition.getXCoord() + xVelocity * deltaTime;
-    double newY = currentPosition.getYCoord() + yVelocity * deltaTime;
-    return new Position(newX, newY);
+  public void calculateNewPosition(double deltaTime) {
+    double newX = this.position.getXCoord() + xVelocity * deltaTime;
+    double newY = this.position.getYCoord() + yVelocity * deltaTime;
+    this.position.setXCoord(newX);
+    this.position.setYCoord(newY);
+
+    for (Position point : points) {
+      double newPointX = point.getXCoord() + xVelocity * deltaTime;
+      double newPointY = point.getYCoord() + yVelocity * deltaTime;
+      point.setXCoord(newPointX);
+      point.setYCoord(newPointY);
+    }
+  }
+
+  @Override
+  public abstract void handleRinkAndNetReflection(ArrayList<Integer> outputs);
+
+  /**
+   * Create the Mobile Points that will track the perimeter of the object this MovementManager is
+   * supposed to track. Each mobile point will be positioned at every 45 degree point on the
+   * mobileObject's perimeter, with the first index starting at the very top, and each consecutive
+   * index is the next point going clockwise.
+   * @return array of Positions representing a mobile object's list of MobilePoints.
+   */
+  public Position[] initializePoints() {
+    double objX = getPosition().getXCoord();
+    double objY = getPosition().getYCoord();
+    Position pointUp = new Position(objX, objY + radius);
+    Position pointUpRight = new Position((radius * Math.cos(Math.PI / 4)) + objX,
+        radius * Math.cos(Math.PI / 4) + objY);
+    Position pointRight = new Position(objX + radius, objY);
+    Position pointDownRight = new Position(objX + (radius * Math.cos(Math.PI / 4)),
+        objY - radius * Math.cos(Math.PI / 4));
+    Position pointDown = new Position(objX, objY - radius);
+    Position pointDownLeft = new Position(objX - (radius * Math.cos(Math.PI / 4)),
+        objY - (radius * Math.cos(Math.PI / 4)));
+    Position pointLeft = new Position(objX - radius, objY);
+    Position pointUpLeft = new Position(objX - (radius * Math.cos(Math.PI / 4)),
+        objY + (radius * Math.cos(Math.PI / 4)));
+
+    return new Position[]
+        {pointUp, pointUpRight, pointRight, pointDownRight, pointDown, pointDownLeft, pointLeft,
+            pointUpLeft};
   }
 
   /**
-   * Reflect the velocities for an object that collides with the rink.
+   * Grab the status of mobile points for this MobileObject, and create an ArrayList. The ArrayList
+   * holds only the indexes that returned true from the method:
+   * .isMobileObjectTouchingBoards.
+   * Essentially, every returned number represents what 45 degree point of this object has breached
+   * or made contact with the boards of the rink, where the top-most point is the number 0, and
+   * it increments clockwise.
+   * @return ArrayList of integers where each integer represents what mobile point has breached or
+   * made contact with the boards. Top most point is 0 and increments clockwise. If the output
+   * is simply an empty ArrayList, then nothing has made contact.
    */
-  protected void reflectOffRink(Boolean[] mobilePoints) {
+  public ArrayList<Integer> grabBoardCollisionStatusOfMobilePointsInRink() {
+    //If the rink detects that the skater is conflicting with the boards.
+    if (Rink.getRinkInstance(GameConfig.RINK_LENGTH, GameConfig.RINK_HEIGHT)
+        .isMobileObjectTouchingBoards(this)) {
 
+      //Grab the status of each mobile point of this skater
+      Boolean[] status = Rink.getRinkInstance(GameConfig.RINK_LENGTH, GameConfig.RINK_HEIGHT)
+          .locationStatusOfAllMobilePoints(this);
+      ArrayList<Integer> output = new ArrayList<Integer>();
+
+      //For the output, an arrayList of integers, append the index of each status point that is
+      //conflicting with the boards.
+      for (int i = 0; i < status.length; i++) {
+        if (status[i] = true) {
+          output.add(i);
+        }
+      }
+      return output;
+    }
+    else {
+      return new ArrayList<Integer>();
+    }
+  }
+
+  /**
+   * Grab the net collision status of mobile points for this MobileObject, and create an ArrayList.
+   * The ArrayList holds only the indexes that returned true from the method:
+   * .isMobileObjectTouchingNet.
+   * Essentially, every returned number represents what 45 degree point of this object has breached
+   * or made contact with the posts or front of the net, where the top-most point is the number 0,
+   * and it increments clockwise.
+   * @return ArrayList of integers where each integer represents what mobile point has breached or
+   * made contact with the boards. Top most point is 0 and increments clockwise. If the output
+   * is simply an empty ArrayList, then nothing has made contact.
+   */
+  public ArrayList<Integer> grabNetCollisionStatusOfMobilePoints() {
+
+    Net[] nets = GameSession.getInstance().getSessionNets();
+
+    //If the net detects that the skater is conflicting with the posts/front.
+    if (nets[0].isTheMobileObjectTouchingNet(this)) {
+
+
+      //Grab the status of each mobile point of this skater
+      Boolean[] status = nets[0].netCollisionStatusOfAllMobilePoints(this);
+      ArrayList<Integer> output = new ArrayList<Integer>();
+
+      //For the output, an arrayList of integers, append the index of each status point that is
+      //conflicting with the boards.
+      for (int i = 0; i < status.length; i++) {
+        if (status[i] = true) {
+          output.add(i);
+        }
+      }
+      return output;
+    }
+
+    if (nets[1].isTheMobileObjectTouchingNet(this)) {
+
+
+      //Grab the status of each mobile point of this skater
+      Boolean[] status = nets[1].netCollisionStatusOfAllMobilePoints(this);
+      ArrayList<Integer> output = new ArrayList<Integer>();
+
+      //For the output, an arrayList of integers, append the index of each status point that is
+      //conflicting with the boards.
+      for (int i = 0; i < status.length; i++) {
+        if (status[i] = true) {
+          output.add(i);
+        }
+      }
+      return output;
+    }
+    else {
+      return new ArrayList<Integer>();
+    }
+  }
+
+  /**
+   * Method to call to constantly check if the Mobile Object is found to have been colliding with
+   * the boards.
+   */
+  protected void handleBoardReflection() {
+    ArrayList<Integer> pointStatus = grabBoardCollisionStatusOfMobilePointsInRink();
+    if (!pointStatus.isEmpty()) {
+      this.handleRinkAndNetReflection(pointStatus);
+    }
+  }
+
+  /**
+   * Method to call to constantly check if the Mobile Object is found to have been colliding with
+   * the nets.
+   */
+  protected void handleNetReflection() {
+    ArrayList<Integer> pointStatus = grabNetCollisionStatusOfMobilePoints();
+    if (!pointStatus.isEmpty()) {
+      this.handleRinkAndNetReflection(pointStatus);
+    }
   }
 
 
@@ -98,6 +262,35 @@ abstract class MovementManager implements IMovementManageable {
   public void setYVelocity(double yVelocity) {
     this.yVelocity = yVelocity;
   }
+
+  @Override
+  public Position getPosition() {
+    return this.position;
+  }
+
+  @Override
+  public void setPosition(double x, double y) {
+    position.setXCoord(x);
+    position.setYCoord(y);
+  }
+
+  @Override
+  public Position[] getPoints() {
+    return this.points;
+  }
+
+  @Override
+  public double getRadius() {
+    return radius;
+  }
+
+  @Override
+  public void setRadius(double radius) {
+    this.radius = radius;
+  }
+
+
+
 
 
 }

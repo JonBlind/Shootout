@@ -1,6 +1,9 @@
 package Model.MovementManagers;
 
+import static Model.GameConfig.*;
+
 import Model.GameConfig;
+import Model.GameSession;
 import Model.Net;
 import Model.Position;
 import java.util.ArrayList;
@@ -21,12 +24,23 @@ public class MovementManagerPuck extends MovementManager {
     this.angle = 0;
   }
 
+  /**
+   * Constructor to initialize the movement manager for a Puck. Based off global configs.
+   */
+  public MovementManagerPuck() {
+    super(0, 0);
+    this.angle = 0;
+    this.position = PUCK_START_POS;
+    this.radius = PUCK_RADIUS;
+  }
+
   @Override
-  public Position updateMovement(Position currentPosition, double deltaTime) {
+  protected void updateMovement(double deltaTime) {
     applyFriction(deltaTime);
     clampVelocity(GameConfig.PUCK_MAX_VELOCITY);
-    Position updatedPos = calculateNewPosition(currentPosition, deltaTime);
-    return null;
+    checkCollisionWithBoards();
+    checkCollisionWithNet();
+    calculateNewPosition(deltaTime);
   }
 
 
@@ -80,9 +94,65 @@ public class MovementManagerPuck extends MovementManager {
     return null;
   }
 
-  @Override
-  public void handleRinkReflection(ArrayList<Integer> outputs) {
+  private void checkCollisionWithBoards() {
+    if (this.rink.isMobileObjectTouchingBoards(this)) {
+      ArrayList<Integer> impactedPoints = grabBoardCollisionStatusOfMobilePointsInRink();
+      handleRinkAndNetReflection(impactedPoints);
+    }
+  }
 
+  private void checkCollisionWithNet() {
+    Net[] nets = GameSession.getInstance().getSessionNets();
+    for (Net net : nets) {
+      if (net.isThePuckTouchingNet(this)) {
+        ArrayList<Integer> impactedPoints = grabNetCollisionStatusOfMobilePoints();
+        handleRinkAndNetReflection(impactedPoints);
+      }
+    }
+  }
+
+  @Override
+  public void handleRinkAndNetReflection(ArrayList<Integer> outputs) {
+    double xReflectFactor = 0;
+    double yReflectFactor = 0;
+    for (Integer output : outputs) {
+      switch (output) {
+        case 0:
+          yReflectFactor -= 1.0;
+          break;
+        case 1:
+          xReflectFactor -= Math.sqrt(2) / 2;
+          yReflectFactor -= Math.sqrt(2) / 2;
+          break;
+        case 2:
+          xReflectFactor -= 1.0;
+          break;
+        case 3:
+          xReflectFactor -= Math.sqrt(2) / 2;
+          yReflectFactor += Math.sqrt(2) / 2;
+        case 4:
+          yReflectFactor += 1.0;
+        case 5:
+          xReflectFactor += Math.sqrt(2) / 2;
+          yReflectFactor += Math.sqrt(2) / 2;
+        case 6:
+          xReflectFactor += 1.0;
+        case 7:
+          xReflectFactor += Math.sqrt(2) / 2;
+          yReflectFactor -= Math.sqrt(2) / 2;
+        default:
+          throw new IllegalArgumentException("List of MobileObject Colliding Mobile Points"
+              + "is Out Of Possible Range.");
+      }
+      double magnitude =
+          Math.sqrt(xReflectFactor * xReflectFactor + yReflectFactor * yReflectFactor);
+
+      xReflectFactor /= magnitude;
+      yReflectFactor /= magnitude;
+
+      xVelocity = xVelocity * xReflectFactor;
+      yVelocity = yVelocity * yReflectFactor;
+    }
   }
 
   /**

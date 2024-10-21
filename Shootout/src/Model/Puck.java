@@ -12,30 +12,14 @@ public class Puck extends MobileObject {
   private MovementManagerPuck movementManager;
 
   /**
-   * Basic constructor for a puck using only coordinates.
-   * @param position In charge of tracking the puck's coordinates.
+   * Basic constructor for a puck.
    */
-  public Puck(Position position) {
-    this.radius = GameConfig.PUCK_RADIUS;
-    this.position = position;
-    this.points = initializePoints();
+  public Puck() {
     this.angle = 0.0;
     this.possessed = false;
     this.possessor = null;
-    this.movementManager = new MovementManagerPuck(0, 0);
+    this.movementManager = new MovementManagerPuck();
   }
-
-  /**
-   * Constructor for puck if you want to customize size, with specified location.
-   * @param radius number of units representing the pucks radius.
-   * @param position In charge of tracking the puck's coordinates.
-   */
-  public Puck(double radius, Position position) {
-    this.radius = radius;
-    this.position = position;
-  }
-
-
 
   @Override
   public void update(double deltaTime) {

@@ -36,20 +36,31 @@ public abstract class Player extends MobileObject {
    * Constructor of a basic player.
    * @param name Name of the player.
    * @param team Team the player is part of.
-   * @param radius Size of the player
    */
-  public Player(String name, TEAM team, double radius) {
+  public Player(String name, TEAM team) {
     this.name = name;
     this.team = team;
-    this.radius = radius;
     this.angle = 0;
-    this.position = new Position(500,500);
-    this.points = initializePoints();
     this.hasPuck = false;
     this.pokeCheck = false;
     this.movementManager = null;
     this.puck = null;
   }
+
+  /**
+   * Constructor with no parameters for a Player. Will be changed.
+   */
+  public Player() {
+    this.name = "Artemi";
+    this.team = TEAM.BLUE;
+    this.movementManager = new MovementManagerSkater(0, 0);
+    this.angle = 0;
+    this.hasPuck = false;
+    this.pokeCheck = false;
+    this.puck = null;
+  }
+
+
 
 
 
@@ -73,6 +84,7 @@ public abstract class Player extends MobileObject {
   public void setPokeCheck(boolean pokeCheck) {
     this.pokeCheck = pokeCheck;
   }
+
 
 
 

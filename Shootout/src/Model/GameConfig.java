@@ -39,10 +39,20 @@ public class GameConfig {
   public static final double DAMPING = 0.98;
 
 
+  //Skater Size
+  public static final double SKATER_RADIUS  = 10;
+
+  //Goalie Size
+  public static final double GOALIE_RADIUS  = 15;
+
+
   //Puck Size
   public static final double PUCK_RADIUS =  4;
 
   //Shooting Strength Factor
   public static final double SHOT_STRENGTH_FACTOR = 8;
   public static final double POKE_CHECK_FACTOR = 10;
+
+  //Position of Spawns
+  public static final Position PUCK_START_POS = new Position(RINK_LENGTH/2, RINK_HEIGHT/2);
 }

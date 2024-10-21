@@ -13,3 +13,6 @@ Immediately: Start working on finishing the goalie and skater logic before start
                 Goalie should not have to deal with player collision: skaters don't impact goalie
                 movement because goalie interference would be too goofy in this. However, a goalie
                 has to be able to push the skater away.
+
+
+Reminder: Towards the end, make sure you detail and change spawn locations in movement managers.

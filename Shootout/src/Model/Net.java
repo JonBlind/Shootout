@@ -1,5 +1,9 @@
 package Model;
 
+import Model.MovementManagers.IMovementManageable;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Class representing a net in the hockey game. Each net has a position, established size including
  * the length of the net opening, as well as the length of the sides that run parallel on the goal
@@ -110,210 +114,173 @@ public class Net {
   }
 
   /**
-   * Method to grab the closest position of the net to the object if the object's y-level is within
-   * the bounds of the net's y-span, but this case shouldn't hold for the x-values.
-   * THIS SHOULD NOT BE CALLED IF THAT REQUIREMENT IS NOT MET.
-   * @param obj MobileObject to compare to the net.
-   * @return Position of the closest part of the net to the MobileObject(obj) parameter.
+   * Is this position conflicting or colliding with the top post of this net?
+   * @param pos the Position to compare to the net's placement and determine if it overlaps with
+   *            the area taken up by the top post.
+   * @return Does this position overlap with a point in the area taken up by the top post?
    */
-  private Position handleSameYDifferentX(IMobileObject obj) {
-    double objX = obj.getPosition().getXCoord();
-    double objY = obj.getPosition().getYCoord();
+  private boolean isThisPositionTouchingTopPost(Position pos) {
+    double posX = this.position.getXCoord();
+    double posY = this.position.getYCoord();
+    double netX = this.position.getXCoord();
+    double netY = this.position.getYCoord();
 
-    //Right net, player in front of net. Return player's y, net's starting X.
-    if (netSide == NetSide.RIGHT && objX < position.getXCoord()) {
-      return new Position(position.getXCoord(), objY);
+    if (netSide == NetSide.LEFT) {
+      return (posX >= netX - sideLength && posX <= netX && posY >= netY + thickness + length
+              && posY <= netY + length + (thickness * 2));
     }
-
-    //Right net, player behind the net. Return player's y, net's starting X + side length.
-    else if (netSide == NetSide.RIGHT && objX > position.getXCoord() + sideLength) {
-      return new Position(position.getXCoord() + sideLength, objY);
-    }
-
-    //Left net, player in front of net. Return player's Y, net's starting X.
-    else if (netSide == NetSide.LEFT && objX > position.getXCoord()) {
-      return new Position(position.getXCoord(), objY);
-    }
-
-    //Left net, player behind net. Return Player's Y, net's starting X - side length.
-    //This method should not be called unless the Y matches, so the else case should be ok.
     else {
-      return new Position(position.getXCoord() - sideLength, objY);
+      return (posX >= netX && posX <= netX + sideLength && posY >= netY + thickness + length
+              && posY <= netY + length + (thickness * 2));
     }
   }
 
   /**
-   * Method to grab the closest position of the net to the object if the object's x-level is within
-   * the bounds of the net's x-span but not the y-values.
-   * THIS SHOULD NOT BE CALLED IF THAT REQUIREMENT IS NOT MET.
-   * @param obj MobileObject to compare to the net.
-   * @return Position of the closest part of the net to the MobileObject(obj) parameter.
+   * Is this position conflicting or colliding with the bottom post of this net?
+   * @param pos the Position to compare to the net's placement and determine if it overlaps with
+   *            the area taken up by the bottom post.
+   * @return Does this position overlap with a point in the area taken up by the bottom post?
    */
-  private Position handleDifferentYSameX(IMobileObject obj) {
-    double objX = obj.getPosition().getXCoord();
-    double objY = obj.getPosition().getYCoord();
+  private boolean isThisPositionTouchingBottomPost(Position pos) {
+    double posX = this.position.getXCoord();
+    double posY = this.position.getYCoord();
+    double netX = this.position.getXCoord();
+    double netY = this.position.getYCoord();
 
-    //If the object is below the net.
-    if (objY < position.getYCoord()) {
-      return new Position(objX, position.getYCoord());
+    if (netSide == NetSide.LEFT) {
+      return (posX >= netX - sideLength && posX <= netX && posY >= netY
+          && posY <= netY + thickness);
     }
-    //Else it should be higher.
     else {
-      return new Position(objX, position.getYCoord() - sideLength);
+      return (posX >= netX && posX <= netX + sideLength && posY >= netY
+          && posY <= netY + thickness);
     }
   }
 
   /**
-   * Method to grab the closest position of the net to the object if neither the object's x or y
-   * coordinates are within the span/range that matches this net.
-   * THIS SHOULD NOT BE CALLED IF THAT REQUIREMENT IS NOT MET.
-   * @param obj MobileObject to compare to the net.
-   * @return Position of the closest part of the net to the MobileObject(obj) parameter.
+   * Is this position conflicting or colliding with the back post of this net?
+   * @param pos the Position to compare to the net's placement and determine if it overlaps with
+   *            the area taken up by the back post.
+   * @return Does this position overlap with a point in the area taken up by the back post?
    */
-  private Position handleDifferentYDifferentX(IMobileObject obj) {
-    double objX = obj.getPosition().getXCoord();
-    double objY = obj.getPosition().getYCoord();
+  private boolean isThisPositionTouchingBackPost(Position pos) {
+    double posX = this.position.getXCoord();
+    double posY = this.position.getYCoord();
+    double netX = this.position.getXCoord();
+    double netY = this.position.getYCoord();
 
-
-    //Should not have to compare it to actual position and only starting position because
-    //intermediate space should be handled prior.
-    if (netSide == NetSide.RIGHT) {
-
-      //Right side net, behind and above it.
-      if (objX > position.getXCoord() && objY > position.getYCoord()) {
-        return new Position(position.getXCoord() + sideLength,
-                position.getYCoord() + length + (thickness * 2));
-      }
-
-      //Right side net, behind and below it.
-      else if (objX > position.getXCoord() && objY < position.getYCoord()) {
-        return new Position(position.getXCoord() + sideLength, position.getYCoord());
-      }
-
-      //Right side net, front and above it.
-      else if (objX < position.getXCoord() && objY > position.getYCoord()) {
-        return new Position(position.getXCoord(), position.getYCoord() + length + (thickness * 2));
-      }
-
-      //Right side net, front and below it.
-      else {
-        return position;
-      }
+    if (netSide == NetSide.LEFT) {
+      return (posX >= netX - sideLength && posX <= netX - sideLength + thickness
+              && posY >= netY && posY <= netY + length + (thickness * 2));
     }
-
     else {
-      //Left side net, behind and above it.
-      if (objX < position.getXCoord() && objY > position.getYCoord()) {
-        return new Position(position.getXCoord() - sideLength,
-                position.getYCoord() + length + (thickness * 2));
-      }
-      //Left side net, behind and below it.
-      else if(objX < position.getXCoord() && objY < position.getYCoord()) {
-        return new Position(position.getXCoord() - sideLength, position.getYCoord());
-      }
-      //Left side net, in front of and above it.
-      else if(objX > position.getXCoord() && objY > position.getYCoord()) {
-        return new Position(position.getXCoord(), position.getYCoord() + length + (thickness * 2));
-      }
-      //Left side net, in front of and below it.
-      else {
-        return position;
-      }
+      return (posX <= netX + sideLength && posX >= netX + sideLength - thickness
+          && posY >= netY && posY <= netY + length + (thickness * 2));
     }
   }
 
   /**
-   * Return the closest point of a net to the mobileObject.
-   * If an object is on the same y-level as the net, it grabs the closest position of the net at
-   * that y-level.
-   * If an object is on the same x-level as the net, it grabs the closest position of the net at
-   * that y-level.
-   * If the x and y values are both off, the closest point will be the closest corner of the net
-   * to the mobile object. So we grab the position of that.
-   * @param obj The mobile object to compare its distance from the net.
-   * @return the Position of the closest point on the net.
+   * Is this position conflicting or colliding with the front of this net, excluding the posts?
+   * @param pos the Position to compare to the net's placement and determine if it overlaps with
+   *            the area taken up by the net opening.
+   * @return Does this position overlap with a point in the area taken up by the net opening?
    */
-  private Position getClosestPointOfNet (IMobileObject obj) {
-    double objX = obj.getPosition().getXCoord();
-    double objY = obj.getPosition().getYCoord();
+  private boolean isThisPositionTouchingFrontNet(Position pos) {
+    double posX = this.position.getXCoord();
+    double posY = this.position.getYCoord();
+    double netX = this.position.getXCoord();
+    double netY = this.position.getYCoord();
 
-    //Essentially inside net, just return the same position. This will likely never be utilized.
-    if (isWithinXBoundary(obj) && isWithinYBoundary(obj)) {
-      return new Position(objX, objY);
+    if (netSide == NetSide.LEFT) {
+      return (posX <= netX && posX >= netX - thickness && posY >= netY - thickness &&
+              posY <= netY + thickness + length);
     }
-
-    //Object is on the same y-levels but differs in x. So find the closest point on either the
-    //front or back of the net.
-    if (!isWithinXBoundary(obj) && isWithinYBoundary(obj)) {
-      return handleSameYDifferentX(obj);
-    }
-
-    //Object is on the same x-levels but differs in y, so grab the nearest side post and the x
-    //value of the object.
-    else if (isWithinXBoundary(obj) && !isWithinYBoundary(obj)) {
-      return handleDifferentYSameX(obj);
-    }
-
     else {
-      return handleDifferentYDifferentX(obj);
+      return (posX >= netX && posX <= netX + thickness && posY >= netY + thickness &&
+          posY <= netY + thickness + length);
     }
   }
 
   /**
-   * Returns the distance to the closest position of the net relative to the inputted mobileObject.
-   * If an object is on the same y-level as the net, it grabs the closest position of the net at
-   * that y-level and finds the displacement,
-   * If an object is on the same x-level as the net, it grabs the closest position of the net at
-   * that y-level and finds the displacement.
-   * If the x and y values are both off, the closest point will be the closest corner of the net
-   * to the mobile object. So we grab the displacement to that.
-   * @param obj The mobile object to compare its distance from the net.
-   * @return the double value of the distance from the mobile object to the net.
+   * Given a MovementManager, identify if the object this manager is responsible for is in contact
+   * with the posts of the net.
+   * @param movementmanager movementmanager to identify if it's respective object is in contatct
+   *                        with this net.
+   * @return is the given Movement Manager's object in contact with the posts of the net?
    */
-  private double computeDistanceToNet(IMobileObject obj) {
-    Position netPos = getClosestPointOfNet(obj);
-
-    return Math.sqrt(Math.pow((netPos.getXCoord() - obj.getPosition().getXCoord()), 2) +
-            Math.pow((netPos.getYCoord() - obj.getPosition().getYCoord()),2));
+  public boolean isTheMobileObjectTouchingNet(IMovementManageable movementmanager) {
+    for (Position point : movementmanager.getPoints()) {
+      if (isThisPointTouchingNet(point)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   /**
-   * Inputting a MobileObject, this method determines if said MobileObject touches/interacts with
-   * the front OPENING of the net. This excludes the post.
-   * @param obj A MobileObject, to determine if the net is being touched.
-   * @return is the back post of either net being touched?
+   * Given a MovementManagerPuck, identify if the object this manager is responsible for is in
+   * contact with the posts of the net.
+   * This requires a unique variation because it should not bounce off the front of the net.
+   * @param movementmanager movementmanager to identify if it's respective object is in contatct
+   *                        with this net.
+   * @return is the given Movement Manager's object in contact with the posts of the net?
    */
-  private boolean isOpeningBeingTouched(IMobileObject obj) {
-    double netX = getClosestPointOfNet(obj).getXCoord();
-    double netY = getClosestPointOfNet(obj).getYCoord();
-    double openingX = position.getXCoord();
-    double bottomY = position.getYCoord() + thickness;
-    double topY = position.getYCoord() + thickness + length;
-
-    return netY > bottomY && netY < topY && openingX == netX
-              && computeDistanceToNet(obj) < obj.getRadius();
+  public boolean isThePuckTouchingNet(IMovementManageable movementmanager) {
+    for (Position point : movementmanager.getPoints()) {
+      if (isThisPointTouchingNetExceptFront(point)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   /**
-   * Is this MobileObject that is being inputted touching/interacting with the posts of the net?
-   * Done to create collision detection.
-   * @param obj the mobile object to see if 
-   * @return boolean, is the given MobileObject touching the
+   * Is the given position touching any post of the net, or even the opening?
+   * @param pos Position to compare to the net and see if it is interacting with the posts.
+   * @return is the given position colliding with any of the net posts or its opening?
    */
-  public boolean isNetBeingTouched(IMobileObject obj) {
-    return obj.getRadius() > computeDistanceToNet(obj);
-
+  private boolean isThisPointTouchingNet(Position pos) {
+    return isThisPositionTouchingTopPost(pos) || isThisPositionTouchingBackPost(pos)
+        || isThisPositionTouchingFrontNet(pos) || isThisPositionTouchingBottomPost(pos);
   }
 
   /**
-   * Method to see if a puck is interacting with the net for collision purposes. This might seem
-   * redundant; however, the puck must be allowed through the front opening of the net, and all
-   * other objects should not be.
-   * @param Puck The puck in the match to detect if it is touching the net.
-   * @return boolean value, is the inputted puck touching the net posts?
+   * Is the given position touching any post of the net, EXCLUDING the opening?
+   * @param pos Position to compare to the net and see if it is interacting with the posts.
+   * @return is the given position colliding with any of the net posts BUT NOT its opening?
    */
-  public boolean isPuckTouchingNet(Puck Puck) {
-    return isNetBeingTouched(Puck) && !isOpeningBeingTouched(Puck);
+  private boolean isThisPointTouchingNetExceptFront(Position pos) {
+    return isThisPositionTouchingTopPost(pos) || isThisPositionTouchingBackPost(pos)
+        || !isThisPositionTouchingFrontNet(pos) || isThisPositionTouchingBottomPost(pos);
+  }
+
+  /**
+   * Method to check the status of every mobile point in the movement manager, returning an array
+   * of booleans checking if each mobile point is colliding with this net.
+   * @param movementmanager MovementManager tracking position and Mobile Points of an object, to
+   *                        see if any of its mobile points are touching the net.
+   * @return Return a boolean for every Mobile Point tracked by the given MovementManager.
+   *         For every corresponding mobile point: Does it collide with the net posts or opening?
+   */
+  public Boolean[] netCollisionStatusOfAllMobilePoints(IMovementManageable movementmanager) {
+    List<Boolean> boolList = new ArrayList<Boolean>();
+    Position[] points = movementmanager.initializePoints();
+
+    for (Position point : points) {
+      boolList.add(isThisPointTouchingNet(point));
+    }
+
+    Boolean[] output = boolList.toArray(new Boolean[0]);
+    return output;
+  }
+
+  /**
+   * Method to identify if the given Position is inside the goalie crease related to this net.
+   * @param pos Position to see if it overlaps with the goalie crease area.
+   * @return Is the given position inside this net's goalie crease?
+   */
+  public boolean isThisPositionInsideGoalieCrease(Position pos) {
+    return crease.isInsideCrease(pos);
   }
 
   /**
